@@ -2,7 +2,14 @@ import Stripe from 'stripe';
 import { headers } from 'next/headers';
 import { supabase } from '@/lib/db/supabase';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key || key.startsWith('sk_test_your')) {
+    throw new Error('Stripe is not configured. Please set STRIPE_SECRET_KEY.');
+  }
+  return new Stripe(key);
+}
+
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(request: Request) {
@@ -17,6 +24,7 @@ export async function POST(request: Request) {
   let event: Stripe.Event;
 
   try {
+    const stripe = getStripe();
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
     console.error('Webhook signature verification failed:', err);

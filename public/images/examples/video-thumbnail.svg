@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <linearGradient id="water3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#cffafe"/>
+      <stop offset="100%" style="stop-color:#22d3ee"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#water3)"/>
+  <!-- Pool walls -->
+  <rect x="0" y="0" width="400" height="20" fill="#e2e8f0"/>
+  <rect x="0" y="280" width="400" height="20" fill="#e2e8f0"/>
+  <!-- Lane line -->
+  <line x1="0" y1="150" x2="400" y2="150" stroke="#06b6d4" stroke-width="3" stroke-dasharray="12,6" opacity="0.4"/>
+  <!-- Underwater swimmer - side view -->
+  <g transform="translate(190, 160)">
+    <!-- Body streamlined -->
+    <ellipse cx="0" cy="0" rx="60" ry="11" fill="#f97316" opacity="0.85"/>
+    <!-- Head -->
+    <circle cx="-65" cy="-3" r="13" fill="#fbbf24"/>
+    <path d="M-78,-3 Q-78,-16 -65,-16 Q-52,-16 -52,-3" fill="#10b981"/>
+    <!-- Arms extended (streamline) -->
+    <line x1="-52" y1="-5" x2="-100" y2="-12" stroke="#f97316" stroke-width="6" stroke-linecap="round"/>
+    <line x1="-100" y1="-12" x2="-115" y2="-10" stroke="#f97316" stroke-width="5" stroke-linecap="round"/>
+    <!-- Legs together (glide) -->
+    <line x1="55" y1="3" x2="95" y2="8" stroke="#f97316" stroke-width="6" stroke-linecap="round"/>
+    <line x1="95" y1="8" x2="110" y2="5" stroke="#f97316" stroke-width="5" stroke-linecap="round"/>
+    <!-- Bubbles -->
+    <circle cx="-80" cy="-20" r="4" fill="white" opacity="0.4"/>
+    <circle cx="-70" cy="-28" r="3" fill="white" opacity="0.3"/>
+    <circle cx="-90" cy="-15" r="2.5" fill="white" opacity="0.35"/>
+    <circle cx="110" cy="-5" r="3" fill="white" opacity="0.3"/>
+  </g>
+  <!-- Camera frame overlay -->
+  <rect x="15" y="30" width="370" height="240" fill="none" stroke="white" stroke-width="2" rx="8" opacity="0.5"/>
+  <!-- REC indicator -->
+  <circle cx="45" cy="52" r="6" fill="#ef4444"/>
+  <text x="58" y="57" fill="white" font-family="Arial,sans-serif" font-size="13" font-weight="bold">REC</text>
+  <!-- Time code -->
+  <text x="355" y="57" text-anchor="end" fill="white" font-family="monospace" font-size="12" opacity="0.8">00:07</text>
+  <g transform="translate(115, 245)">
+    <rect width="170" height="28" rx="14" fill="#0f172a" opacity="0.7"/>
+    <text x="85" y="19" text-anchor="middle" fill="white" font-family="Arial,sans-serif" font-size="12" font-weight="bold">5-10s VIDEO CLIP</text>
+  </g>
+</svg>

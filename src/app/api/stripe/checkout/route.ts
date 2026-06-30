@@ -1,7 +1,13 @@
 import Stripe from 'stripe';
 import { auth } from '@/app/api/auth/[...nextauth]/route';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+function getStripe() {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key || key.startsWith('sk_test_your')) {
+    throw new Error('Stripe is not configured. Please set STRIPE_SECRET_KEY.');
+  }
+  return new Stripe(key);
+}
 
 export async function POST(request: Request) {
   const session = await auth();
@@ -16,6 +22,7 @@ export async function POST(request: Request) {
       return new Response('Missing priceId', { status: 400 });
     }
 
+    const stripe = getStripe();
     const checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [

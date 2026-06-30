@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Zap, Brain, TrendingUp, Upload, Sparkles, FileCheck } from 'lucide-react';
+import { Zap, Brain, TrendingUp, Upload, Sparkles, FileCheck, Play } from 'lucide-react';
 
 const features = [
   {
@@ -21,6 +21,25 @@ const features = [
     title: 'Track Progress',
     description:
       'Save your analysis history and visualize your improvement over time. See how your technique evolves with each session.',
+  },
+];
+
+const samples = [
+  {
+    image: '/images/examples/freestyle-side.svg',
+    title: 'Freestyle – Side View',
+    description: 'Clear side angle showing full body position and arm entry.',
+  },
+  {
+    image: '/images/examples/breaststroke.svg',
+    title: 'Breaststroke',
+    description: 'Front or side view showing arm and leg coordination.',
+  },
+  {
+    image: '/images/examples/video-thumbnail.svg',
+    title: 'Video Upload',
+    description: '5–10 second clip from underwater or above water side angle.',
+    isVideo: true,
   },
 ];
 
@@ -125,6 +144,51 @@ export default function Home() {
                 <p className="mt-3 text-muted-foreground leading-relaxed">{step.description}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* What to Upload Section */}
+      <section className="py-20 sm:py-28 bg-muted/30">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-foreground">
+              What to Upload
+            </h2>
+            <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+              See examples of photos and videos that work best for analysis
+            </p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-3">
+            {samples.map((sample) => (
+              <Card key={sample.title} className="overflow-hidden border-border/60 shadow-sm hover:shadow-md transition-shadow">
+                <div className="relative">
+                  <img
+                    src={sample.image}
+                    alt={sample.title + ' example'}
+                    className="w-full h-48 object-cover"
+                  />
+                  {sample.isVideo && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90">
+                        <Play className="h-6 w-6 text-primary ml-0.5" fill="currentColor" />
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <CardContent className="pt-4">
+                  <h3 className="text-lg font-semibold text-foreground">{sample.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{sample.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="mt-12 text-center">
+            <Link href="/analyze">
+              <Button size="lg">Try It Now →</Button>
+            </Link>
           </div>
         </div>
       </section>

@@ -17,7 +17,7 @@ export async function register() {
             createConnection: (opts: any, oncreate: any) => {
               return (proxyAgent as any).connect(opts, oncreate);
             },
-          },
+          } as any,
         });
         
         setGlobalDispatcher(proxyDispatcher);
