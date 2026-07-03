@@ -18,6 +18,10 @@ export async function POST(request: Request) {
     const storeId = process.env.LEMON_SQUEEZY_STORE_ID;
 
     if (!apiKey || !storeId) {
+      console.error('Missing environment variables:', {
+        hasApiKey: !!apiKey,
+        hasStoreId: !!storeId,
+      });
       throw new Error('Lemon Squeezy is not configured. Please set environment variables.');
     }
 
@@ -27,6 +31,8 @@ export async function POST(request: Request) {
       variantId,
       userId: session.user.id,
       userEmail: session.user.email,
+      nextAuthUrl: process.env.NEXTAUTH_URL,
+      fullSessionUser: JSON.stringify(session.user),
     });
 
     const response = await fetch('https://api.lemonsqueezy.com/v1/checkouts', {
@@ -42,7 +48,7 @@ export async function POST(request: Request) {
           attributes: {
             checkout_data: {
               custom: {
-                user_id: session.user.id || '',
+                user_id: (session.user as any).id || '',
                 user_email: session.user.email || '',
               },
             },
@@ -83,7 +89,16 @@ export async function POST(request: Request) {
     console.log('Checkout created successfully:', data.data?.attributes?.url);
     return Response.json({ url: data.data.attributes.url });
   } catch (error) {
-    console.error('Lemon Squeezy checkout error:', error);
-    return new Response('Internal Server Error', { status: 500 });
+    console.error('Lemon Squeezy checkout error:', {
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    return new Response(JSON.stringify({ 
+      error: 'Internal Server Error',
+      message: error instanceof Error ? error.message : 'Unknown error'
+    }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 }
