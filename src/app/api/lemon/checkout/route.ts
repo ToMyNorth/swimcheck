@@ -1,4 +1,4 @@
-import { setup, createCheckout } from '@lemonsqueezy/lemonsqueezy.js';
+import { lemonSqueezySetup, createCheckout } from '@lemonsqueezy/lemonsqueezy.js';
 import { auth } from '@/app/api/auth/[...nextauth]/route';
 
 export async function POST(request: Request) {
@@ -23,7 +23,7 @@ export async function POST(request: Request) {
     }
 
     // Setup Lemon Squeezy SDK
-    setup({
+    lemonSqueezySetup({
       apiKey: apiKey,
     });
 
