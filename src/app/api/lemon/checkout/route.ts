@@ -62,23 +62,16 @@ export async function POST(request: Request) {
       throw new Error(`Checkout failed: ${checkout.error.message}`);
     }
 
-    // Log the full checkout response for debugging
-    console.log('Full checkout response structure:', {
-      hasData: !!checkout.data,
-      dataType: typeof checkout.data,
-      hasAttributes: !!(checkout.data as any)?.attributes,
-      statusCode: checkout.statusCode,
-    });
-    
+    // Lemon Squeezy SDK returns JSON API format: checkout.data.data.attributes.url
     // @ts-ignore - Lemon Squeezy SDK type issue
-    const checkoutUrl = (checkout.data as any)?.attributes?.url;
-    console.log('Checkout URL:', checkoutUrl);
+    const checkoutUrl = checkout.data?.data?.attributes?.url;
     
     if (!checkoutUrl) {
       console.error('Missing checkout URL. Full response:', JSON.stringify(checkout, null, 2));
       throw new Error('Checkout URL is missing from response');
     }
     
+    console.log('Checkout created successfully:', checkoutUrl);
     return Response.json({ url: checkoutUrl });
   } catch (error) {
     console.error('Lemon Squeezy checkout error:', {
