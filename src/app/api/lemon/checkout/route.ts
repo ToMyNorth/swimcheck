@@ -22,6 +22,13 @@ export async function POST(request: Request) {
     }
 
     // Use direct HTTP API call instead of SDK
+    console.log('Creating checkout with:', {
+      storeId,
+      variantId,
+      userId: session.user.id,
+      userEmail: session.user.email,
+    });
+
     const response = await fetch('https://api.lemonsqueezy.com/v1/checkouts', {
       method: 'POST',
       headers: {
@@ -64,11 +71,16 @@ export async function POST(request: Request) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Lemon Squeezy API error:', errorText);
+      console.error('Lemon Squeezy API error:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText,
+      });
       throw new Error(`API error: ${response.status} - ${errorText}`);
     }
 
     const data = await response.json();
+    console.log('Checkout created successfully:', data.data?.attributes?.url);
     return Response.json({ url: data.data.attributes.url });
   } catch (error) {
     console.error('Lemon Squeezy checkout error:', error);
