@@ -42,21 +42,16 @@ export async function POST(request: Request) {
 
     // Use SDK to create checkout
     const checkout = await createCheckout(storeId, variantId, {
-      customPrice: undefined,
       productOptions: {
-        redirect_url: `${process.env.NEXTAUTH_URL}/dashboard?success=true`,
-        receipt_link_url: `${process.env.NEXTAUTH_URL}/dashboard`,
+        redirectUrl: `${process.env.NEXTAUTH_URL}/dashboard?success=true`,
+        receiptLinkUrl: `${process.env.NEXTAUTH_URL}/dashboard`,
       },
-      checkoutOptions: undefined,
       checkoutData: {
         custom: {
           user_id: (session.user as any).id || '',
           user_email: session.user.email || '',
         },
       },
-      expiresAt: undefined,
-      preview: undefined,
-      testMode: false,
     });
 
     if (checkout.error) {
