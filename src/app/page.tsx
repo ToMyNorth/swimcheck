@@ -26,17 +26,17 @@ const features = [
 
 const samples = [
   {
-    image: '/images/examples/freestyle-side.svg',
+    image: '/images/examples/freestyle-side.jpg',
     title: 'Freestyle – Side View',
     description: 'Clear side angle showing full body position and arm entry.',
   },
   {
-    image: '/images/examples/breaststroke.svg',
+    image: '/images/examples/breaststroke.jpg',
     title: 'Breaststroke',
     description: 'Front or side view showing arm and leg coordination.',
   },
   {
-    image: '/images/examples/video-thumbnail.svg',
+    image: '/images/examples/video-thumbnail.jpg',
     title: 'Video Upload',
     description: '5–10 second clip from underwater or above water side angle.',
     isVideo: true,
@@ -96,7 +96,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <h2 className="text-3xl font-bold tracking-tight sm:text-4xl text-foreground">
-              Why SwimCheck?
+              Why StrokeLab?
             </h2>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
               Professional-grade analysis at your fingertips
@@ -210,14 +210,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* JSON-LD Structured Data */}
+      {/* JSON-LD Structured Data: SoftwareApplication */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'SoftwareApplication',
-            name: 'SwimCheck',
+            name: 'StrokeLab',
             applicationCategory: 'SportsApplication',
             operatingSystem: 'Web',
             offers: {
@@ -226,6 +226,91 @@ export default function Home() {
               priceCurrency: 'USD',
             },
             description: 'AI-powered swimming stroke analysis tool',
+          }),
+        }}
+      />
+
+      {/* JSON-LD Structured Data: FAQPage */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: [
+              {
+                '@type': 'Question',
+                name: 'How does StrokeLab work?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Upload your swimming photos, our AI analyzes your stroke using MediaPipe pose detection, and you receive personalized feedback in seconds.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'What type of photos should I upload?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Side-view photos taken above water work best. Ensure good lighting and that your full body is visible. We recommend 1-3 photos for comprehensive analysis.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'How accurate is the AI analysis?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Our AI uses MediaPipe Pose estimation, which provides 33 3D keypoints with high accuracy. For best results, use clear photos with minimal water splash obstruction.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'What swimming strokes are supported?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'MVP supports freestyle (front crawl) only. Backstroke, breaststroke, and butterfly will be added in future updates.',
+                },
+              },
+              {
+                '@type': 'Question',
+                name: 'Is my data secure?',
+                acceptedAnswer: {
+                  '@type': 'Answer',
+                  text: 'Yes. We use Cloudflare R2 for secure image storage and never share your data with third parties. You can delete your analysis history at any time.',
+                },
+              },
+            ],
+          }),
+        }}
+      />
+
+      {/* JSON-LD Structured Data: HowTo */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'HowTo',
+            name: 'How to Analyze Your Swimming Stroke with StrokeLab',
+            step: [
+              {
+                '@type': 'HowToStep',
+                position: 1,
+                name: 'Upload Photo',
+                text: 'Take a photo of your swimming from the side (above water). We recommend 1-3 photos for best results.',
+              },
+              {
+                '@type': 'HowToStep',
+                position: 2,
+                name: 'AI Analysis',
+                text: 'Our AI detects your body keypoints and evaluates your stroke against professional standards.',
+              },
+              {
+                '@type': 'HowToStep',
+                position: 3,
+                name: 'Get Feedback',
+                text: 'Receive a detailed report with scores, visual overlays, and personalized improvement suggestions.',
+              },
+            ],
           }),
         }}
       />

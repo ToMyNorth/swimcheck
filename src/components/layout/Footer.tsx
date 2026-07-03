@@ -5,12 +5,12 @@ const footerLinks = [
   { href: '/privacy', label: 'Privacy Policy' },
   { href: '/terms', label: 'Terms of Service' },
   { href: '/faq', label: 'FAQ' },
-  { href: 'mailto:contact@swimcheck.com', label: 'Contact' },
+  { href: 'mailto:contact@strokelab.app', label: 'Contact' },
 ];
 
 const socialLinks = [
-  { href: 'https://twitter.com/swimcheck', label: 'Twitter', icon: 'X' },
-  { href: 'https://github.com/swimcheck', label: 'GitHub', icon: 'GH' },
+  { href: 'https://twitter.com/strokelab', label: 'Twitter', icon: 'X' },
+  { href: 'https://github.com/strokelab', label: 'GitHub', icon: 'GH' },
 ];
 
 export default function Footer() {
@@ -21,7 +21,7 @@ export default function Footer() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 font-bold text-lg text-primary">
             <Waves className="h-5 w-5" />
-            <span>SwimCheck</span>
+            <span>StrokeLab</span>
           </Link>
 
           {/* Links */}
@@ -57,7 +57,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="mt-8 text-center">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} SwimCheck. All rights reserved.
+            &copy; {new Date().getFullYear()} StrokeLab. All rights reserved.
           </p>
         </div>
       </div>

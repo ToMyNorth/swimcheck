@@ -5,4 +5,4 @@ Disallow: /auth/
 Disallow: /dashboard
 Disallow: /checkout
 
-Sitemap: https://swimcheck.com/sitemap.xml
+Sitemap: https://strokelab.app/sitemap.xml

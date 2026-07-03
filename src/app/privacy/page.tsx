@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy - SwimCheck',
-  description: 'Learn how SwimCheck collects, uses, and protects your personal data.',
+  title: 'Privacy Policy | StrokeLab',
+  description: 'Learn how StrokeLab collects, uses, and protects your personal data.',
   robots: { index: false, follow: true },
 };
 
@@ -17,7 +17,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-semibold text-foreground">1. Introduction</h2>
             <p className="mt-3 leading-relaxed">
-              SwimCheck ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services. Please read this policy carefully. By using SwimCheck, you consent to the data practices described herein.
+              StrokeLab ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services. Please read this policy carefully. By using StrokeLab, you consent to the data practices described herein.
             </p>
           </section>
 
@@ -36,7 +36,7 @@ export default function PrivacyPage() {
 
             <h3 className="mt-4 text-lg font-medium text-foreground">2.2 Automatically Collected Data</h3>
             <p className="mt-2 leading-relaxed">
-              When you access SwimCheck, we may automatically collect:
+              When you access StrokeLab, we may automatically collect:
             </p>
             <ul className="mt-2 list-disc pl-6 space-y-1">
               <li>Device information (browser type, operating system, device identifiers)</li>
@@ -118,8 +118,8 @@ export default function PrivacyPage() {
             </ul>
             <p className="mt-3 leading-relaxed">
               To exercise any of these rights, please contact us at{' '}
-              <a href="mailto:privacy@swimcheck.com" className="text-primary hover:underline">
-                privacy@swimcheck.com
+              <a href="mailto:privacy@strokelab.app" className="text-primary hover:underline">
+                privacy@strokelab.app
               </a>
               . We will respond to your request within 30 days.
             </p>
@@ -142,7 +142,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-semibold text-foreground">11. Children's Privacy</h2>
             <p className="mt-3 leading-relaxed">
-              SwimCheck is not directed to children under the age of 13. We do not knowingly collect personal information from children. If we become aware that a child under 13 has provided us with personal data, we will take steps to delete it promptly.
+              StrokeLab is not directed to children under the age of 13. We do not knowingly collect personal information from children. If we become aware that a child under 13 has provided us with personal data, we will take steps to delete it promptly.
             </p>
           </section>
 
@@ -159,9 +159,9 @@ export default function PrivacyPage() {
               If you have questions, concerns, or requests regarding this Privacy Policy, please contact us at:
             </p>
             <div className="mt-3 rounded-lg bg-muted p-4">
-              <p className="font-medium text-foreground">SwimCheck Privacy Team</p>
-              <p>Email: <a href="mailto:privacy@swimcheck.com" className="text-primary hover:underline">privacy@swimcheck.com</a></p>
-              <p>Website: <a href="https://swimcheck.com" className="text-primary hover:underline">swimcheck.com</a></p>
+              <p className="font-medium text-foreground">StrokeLab Privacy Team</p>
+              <p>Email: <a href="mailto:privacy@strokelab.app" className="text-primary hover:underline">privacy@strokelab.app</a></p>
+              <p>Website: <a href="https://strokelab.app" className="text-primary hover:underline">strokelab.app</a></p>
             </div>
           </section>
         </div>

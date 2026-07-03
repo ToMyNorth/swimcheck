@@ -1,9 +1,18 @@
+import type { Metadata } from 'next';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: 'FAQ - Frequently Asked Questions | StrokeLab',
+    description: 'Find answers to common questions about our AI swimming analysis tool.',
+    alternates: { canonical: '/faq' },
+  };
+}
 
 const faqs = [
   {
@@ -48,7 +57,7 @@ export default function FAQPage() {
             Frequently Asked Questions
           </h1>
           <p className="mt-4 text-lg text-muted-foreground">
-            Everything you need to know about SwimCheck
+            Everything you need to know about StrokeLab
           </p>
         </div>
 
@@ -70,7 +79,7 @@ export default function FAQPage() {
         <div className="mt-12 text-center">
           <p className="text-muted-foreground">
             Still have questions?{' '}
-            <a href="mailto:contact@swimcheck.com" className="text-primary hover:underline font-medium">
+            <a href="mailto:contact@strokelab.app" className="text-primary hover:underline font-medium">
               Contact us
             </a>
           </p>

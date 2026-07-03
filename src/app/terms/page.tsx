@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service - SwimCheck',
-  description: 'Read the terms and conditions for using SwimCheck services.',
+  title: 'Terms of Service | StrokeLab',
+  description: 'Read the terms and conditions for using StrokeLab services.',
   robots: { index: false, follow: true },
 };
 
@@ -17,14 +17,14 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold text-foreground">1. Acceptance of Terms</h2>
             <p className="mt-3 leading-relaxed">
-              By accessing or using SwimCheck ("the Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you may not use the Service. We reserve the right to modify these Terms at any time, and your continued use constitutes acceptance of any revisions.
+              By accessing or using StrokeLab ("the Service"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you may not use the Service. We reserve the right to modify these Terms at any time, and your continued use constitutes acceptance of any revisions.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground">2. Description of Service</h2>
             <p className="mt-3 leading-relaxed">
-              SwimCheck provides AI-powered swimming stroke analysis services. Users can upload swimming photos to receive automated feedback on technique, including pose estimation, scoring, and improvement suggestions. The Service is available via web browser on a subscription or freemium basis.
+              StrokeLab provides AI-powered swimming stroke analysis services. Users can upload swimming photos to receive automated feedback on technique, including pose estimation, scoring, and improvement suggestions. The Service is available via web browser on a subscription or freemium basis.
             </p>
           </section>
 
@@ -37,7 +37,7 @@ export default function TermsPage() {
             <h3 className="mt-4 text-lg font-medium text-foreground">3.2 Account Responsibility</h3>
             <p className="mt-2 leading-relaxed">
               You are responsible for all activity under your account. You must notify us immediately of any unauthorized use or security breach at{' '}
-              <a href="mailto:support@swimcheck.com" className="text-primary hover:underline">support@swimcheck.com</a>.
+              <a href="mailto:support@strokelab.app" className="text-primary hover:underline">support@strokelab.app</a>.
             </p>
             <h3 className="mt-4 text-lg font-medium text-foreground">3.3 Account Termination</h3>
             <p className="mt-2 leading-relaxed">
@@ -82,28 +82,28 @@ export default function TermsPage() {
           <section>
             <h2 className="text-xl font-semibold text-foreground">6. Intellectual Property</h2>
             <p className="mt-3 leading-relaxed">
-              All content, features, and functionality of the Service (including but not limited to software, algorithms, AI models, text, graphics, and logos) are owned by SwimCheck and protected by copyright, trademark, and other intellectual property laws. You retain ownership of the photos you upload but grant us a limited license to process them for the purpose of providing the Service.
+              All content, features, and functionality of the Service (including but not limited to software, algorithms, AI models, text, graphics, and logos) are owned by StrokeLab and protected by copyright, trademark, and other intellectual property laws. You retain ownership of the photos you upload but grant us a limited license to process them for the purpose of providing the Service.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground">7. Disclaimer of Warranties</h2>
             <p className="mt-3 leading-relaxed">
-              THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. SwimCheck does not guarantee that the Service will be uninterrupted, error-free, or that the analysis results are medically or professionally accurate. The Service is intended for informational and training purposes only and should not replace professional coaching or medical advice.
+              THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT. StrokeLab does not guarantee that the Service will be uninterrupted, error-free, or that the analysis results are medically or professionally accurate. The Service is intended for informational and training purposes only and should not replace professional coaching or medical advice.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground">8. Limitation of Liability</h2>
             <p className="mt-3 leading-relaxed">
-              TO THE MAXIMUM EXTENT PERMITTED BY LAW, SwimCheck SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF DATA, LOSS OF PROFITS, OR PERSONAL INJURY RESULTING FROM USE OF THE SERVICE. Our total liability shall not exceed the amount you paid us in the 12 months preceding the claim.
+              TO THE MAXIMUM EXTENT PERMITTED BY LAW, StrokeLab SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF DATA, LOSS OF PROFITS, OR PERSONAL INJURY RESULTING FROM USE OF THE SERVICE. Our total liability shall not exceed the amount you paid us in the 12 months preceding the claim.
             </p>
           </section>
 
           <section>
             <h2 className="text-xl font-semibold text-foreground">9. Indemnification</h2>
             <p className="mt-3 leading-relaxed">
-              You agree to indemnify, defend, and hold harmless SwimCheck, its officers, directors, employees, and agents from any claims, damages, losses, liabilities, and expenses (including reasonable attorneys' fees) arising out of or related to your use of the Service, your violation of these Terms, or your infringement of any third-party rights.
+              You agree to indemnify, defend, and hold harmless StrokeLab, its officers, directors, employees, and agents from any claims, damages, losses, liabilities, and expenses (including reasonable attorneys' fees) arising out of or related to your use of the Service, your violation of these Terms, or your infringement of any third-party rights.
             </p>
           </section>
 
@@ -141,9 +141,9 @@ export default function TermsPage() {
               If you have questions about these Terms, please contact us at:
             </p>
             <div className="mt-3 rounded-lg bg-muted p-4">
-              <p className="font-medium text-foreground">SwimCheck Legal Team</p>
-              <p>Email: <a href="mailto:legal@swimcheck.com" className="text-primary hover:underline">legal@swimcheck.com</a></p>
-              <p>Website: <a href="https://swimcheck.com" className="text-primary hover:underline">swimcheck.com</a></p>
+              <p className="font-medium text-foreground">StrokeLab Legal Team</p>
+              <p>Email: <a href="mailto:legal@strokelab.app" className="text-primary hover:underline">legal@strokelab.app</a></p>
+              <p>Website: <a href="https://strokelab.app" className="text-primary hover:underline">strokelab.app</a></p>
             </div>
           </section>
         </div>

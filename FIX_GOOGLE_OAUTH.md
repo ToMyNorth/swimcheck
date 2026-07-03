@@ -91,7 +91,7 @@ npm run dev
 #### 步骤 1：在 GitHub 注册 OAuth App
 1. 访问 https://github.com/settings/applications/new
 2. 填写信息：
-   - **Application name**: SwimCheck
+   - **Application name**: StrokeLab
    - **Homepage URL**: http://localhost:3000
    - **Authorization callback URL**: http://localhost:3000/api/auth/callback/github
 3. 获取 `Client ID` 和 `Client Secret`

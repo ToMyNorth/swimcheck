@@ -1,5 +1,5 @@
 {
-  "name": "swimcheck",
+  "name": "strokelab",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
   "dependencies": {
     "@auth/supabase-adapter": "^1.11.2",
     "@base-ui/react": "^1.6.0",
+    "@lemonsqueezy/lemonsqueezy.js": "^4.0.0",
     "@mediapipe/drawing_utils": "^0.3.1675466124",
     "@mediapipe/pose": "^0.5.1675469404",
     "@supabase/supabase-js": "^2.108.2",

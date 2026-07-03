@@ -1,4 +1,4 @@
-# SwimCheck 生产环境部署指南
+# StrokeLab 生产环境部署指南
 
 ##  Vercel 部署步骤
 
@@ -15,7 +15,7 @@ git push origin main
 1. 访问 [vercel.com](https://vercel.com)
 2. 点击 "Add New Project"
 3. 选择 "Import Git Repository"
-4. 选择 `swimcheck` 仓库
+4. 选择 `strokelab` 仓库
 5. 点击 "Deploy"
 
 ### 3. 配置环境变量
@@ -45,7 +45,7 @@ NEXT_PUBLIC_STRIPE_PRICE_PRO=price_pro_here
 
 > **注意**：
 > - `NEXTAUTH_SECRET` 可以使用命令生成：`openssl rand -base64 32`
-> - `NEXTAUTH_URL` 替换为你的实际域名（如 `https://swimcheck.vercel.app`）
+> - `NEXTAUTH_URL` 替换为你的实际域名（如 `https://strokelab.vercel.app`）
 > - **不要设置 `HTTP_PROXY`/`HTTPS_PROXY`**（Vercel 海外服务器可直接访问 Google API）
 
 ### 4. 启用 Google OAuth Provider
@@ -69,7 +69,7 @@ providers: [
 在 [Google Cloud Console](https://console.cloud.google.com/) 中：
 
 1. 进入 "APIs & Services" → "Credentials"
-2. 找到 "OAuth 2.0 Client IDs" → "SwimCheck"
+2. 找到 "OAuth 2.0 Client IDs" → "StrokeLab"
 3. 在 "Authorized redirect URIs" 中添加：
    ```
    https://your-domain.vercel.app/api/auth/callback/google

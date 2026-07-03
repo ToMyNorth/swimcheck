@@ -8,16 +8,22 @@ import "./globals.css";
 const fontVariables = "font-sans";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://swimcheck.com'),
-  title: 'SwimCheck - AI Swimming Stroke Analysis',
+  metadataBase: new URL('https://strokelab.app'),
+  title: 'StrokeLab - AI Swimming Stroke Analysis',
   description: 'Upload your swimming photos and get instant AI-powered feedback on your technique. Improve your form with personalized coaching.',
   openGraph: {
-    title: 'SwimCheck - AI Swimming Stroke Analysis',
+    title: 'StrokeLab - AI Swimming Stroke Analysis',
     description: 'AI-powered swimming stroke analysis for better technique.',
-    images: ['/og-image.png'],
+    images: ['/images/examples/freestyle-side.jpg'],
     url: '/',
-    siteName: 'SwimCheck',
+    siteName: 'StrokeLab',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'StrokeLab - AI Swimming Stroke Analysis',
+    description: 'AI-powered swimming stroke analysis for better technique.',
+    images: ['/images/examples/freestyle-side.jpg'],
   },
   robots: {
     index: true,
@@ -25,6 +31,9 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true },
   },
   alternates: { canonical: '/' },
+  verification: {
+    google: '6IqIyPibuVCL9iqCrcn_mPut0rsklg8zrlSOtaI9nss',
+  },
 };
 
 export default function RootLayout({

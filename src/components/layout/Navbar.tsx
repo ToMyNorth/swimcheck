@@ -24,7 +24,7 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-xl text-primary">
           <Waves className="h-6 w-6" />
-          <span>SwimCheck</span>
+          <span>StrokeLab</span>
         </Link>
 
         {/* Desktop Nav Links */}

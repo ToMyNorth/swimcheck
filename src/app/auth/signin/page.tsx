@@ -13,10 +13,10 @@ export default function SignInPage() {
           <div className="flex justify-center mb-4">
             <div className="flex items-center gap-2 text-primary">
               <Waves className="h-8 w-8" />
-              <span className="text-2xl font-bold">SwimCheck</span>
+              <span className="text-2xl font-bold">StrokeLab</span>
             </div>
           </div>
-          <CardTitle className="text-2xl">Sign in to SwimCheck</CardTitle>
+          <CardTitle className="text-2xl">Sign in to StrokeLab</CardTitle>
           <p className="text-sm text-muted-foreground mt-2">
             Track your swimming progress and unlock advanced features
           </p>

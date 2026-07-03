@@ -75,7 +75,7 @@ function makeMockKeypoints(overrides: Partial<Record<number, Partial<Keypoint>>>
 
 // ── Test cases ────────────────────────────────────────────────────────────────
 
-console.log('=== SwimCheck Scoring Engine — Offline Tests ===\n');
+console.log('=== StrokeLab Scoring Engine — Offline Tests ===\n');
 
 // Test 1: Decent freestyle (horizontal, slight elbow bend)
 console.log('Test 1: Decent freestyle (horizontal body, 160° elbow)');

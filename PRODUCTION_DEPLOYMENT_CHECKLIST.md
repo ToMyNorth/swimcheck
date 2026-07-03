@@ -1,4 +1,4 @@
-# SwimCheck 生产环境部署检查清单
+# StrokeLab 生产环境部署检查清单
 
 ## ✅ 部署前准备
 
@@ -15,7 +15,7 @@ NEXTAUTH_SECRET=<生成一个随机字符串，至少32字符>
 # 示例：aBcDeFgHiJkLmNoPqRsTuVwXyZ0123456789+/=
 
 NEXTAUTH_URL=https://your-domain.vercel.app
-# 替换为你的实际域名，如：https://swimcheck.vercel.app
+# 替换为你的实际域名，如：https://strokelab.vercel.app
 
 # OpenRouter API Key（已配置 ✅）
 OPENAI_API_KEY=your-openrouter-api-key
@@ -85,7 +85,7 @@ providers: [
 
 1. 访问 [Google Cloud Console](https://console.cloud.google.com/)
 2. 进入 "APIs & Services" → "Credentials"
-3. 找到 "OAuth 2.0 Client IDs" → "SwimCheck"
+3. 找到 "OAuth 2.0 Client IDs" → "StrokeLab"
 4. 在 "Authorized redirect URIs" 中添加：
    ```
    https://your-domain.vercel.app/api/auth/callback/google
@@ -181,7 +181,7 @@ git push origin main
 1. 访问 [vercel.com](https://vercel.com)
 2. 点击 "Add New Project"
 3. 选择 "Import Git Repository"
-4. 选择 `swimcheck` 仓库
+4. 选择 `strokelab` 仓库
 5. 点击 "Deploy"
 
 ### 步骤 3：配置环境变量
@@ -277,7 +277,7 @@ git push origin main
 
 ### 1. 自定义域名（可选）
 1. 在 Vercel Dashboard → Settings → Domains
-2. 添加你的域名（如 `swimcheck.com`）
+2. 添加你的域名（如 `strokelab.app`）
 3. 按照提示配置 DNS（CNAME 或 A 记录）
 4. 更新 Google Cloud Console 中的回调 URL
 

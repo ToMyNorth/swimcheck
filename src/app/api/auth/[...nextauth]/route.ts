@@ -8,18 +8,15 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
     secret: process.env.SUPABASE_SERVICE_ROLE_KEY!,
   }),
   providers: [
-    // TODO: Enable Google OAuth in production (Vercel deployment)
-    // Google OAuth requires network access to accounts.google.com
-    // For local development in China, use GitHub OAuth or skip authentication
-    /*
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
-    */
     // Apple Provider requires Apple Developer account, skip for MVP
     // Add later if needed
   ],
+  trustHost: true,
+  debug: true, // Enable debug mode for detailed error logging
   callbacks: {
     async session({ session, user }) {
       if (session.user) {

@@ -79,7 +79,7 @@ export default function SkeletonOverlay({ imageSrc, keypoints, showAngles = fals
   const handleDownload = () => {
     if (!canvasRef.current) return;
     const link = document.createElement('a');
-    link.download = 'swimcheck-analysis.png';
+    link.download = 'strokelab-analysis.png';
     link.href = canvasRef.current.toDataURL('image/png');
     link.click();
   };

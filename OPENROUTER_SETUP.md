@@ -20,7 +20,7 @@
 ### 步骤 2：创建 API Key
 1. 访问 [https://openrouter.ai/keys](https://openrouter.ai/keys)
 2. 点击 "Create Key"
-3. 输入密钥名称（如 "SwimCheck"）
+3. 输入密钥名称（如 "StrokeLab"）
 4. 复制生成的密钥（格式：`sk-or-v1-...`）
 
 ### 步骤 3：充值（可选但推荐）

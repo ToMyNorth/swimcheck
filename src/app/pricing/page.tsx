@@ -40,7 +40,7 @@ const plans = [
     cta: 'Subscribe',
     href: '/checkout?plan=basic',
     popular: true,
-    priceId: 'price_basic_monthly', // Replace with actual Stripe Price ID
+    variantId: process.env.NEXT_PUBLIC_LEMON_BASIC_VARIANT_ID || '1866553',
   },
   {
     name: 'Pro',
@@ -57,7 +57,7 @@ const plans = [
     cta: 'Subscribe',
     href: '/checkout?plan=pro',
     popular: false,
-    priceId: 'price_pro_monthly', // Replace with actual Stripe Price ID
+    variantId: process.env.NEXT_PUBLIC_LEMON_PRO_VARIANT_ID || '1866577',
   },
 ];
 
@@ -66,8 +66,8 @@ export default function PricingPage() {
   const { data: session } = useSession();
   const [loading, setLoading] = useState<string | null>(null);
 
-  const handleSubscribe = async (priceId: string | null) => {
-    if (!priceId) {
+  const handleSubscribe = async (variantId: string | null) => {
+    if (!variantId) {
       // Free plan
       router.push('/analyze');
       return;
@@ -78,12 +78,12 @@ export default function PricingPage() {
       return;
     }
 
-    setLoading(priceId);
+    setLoading(variantId);
     try {
-      const response = await fetch('/api/stripe/checkout', {
+      const response = await fetch('/api/lemon/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ priceId }),
+        body: JSON.stringify({ variantId }),
       });
 
       if (!response.ok) {
@@ -155,10 +155,10 @@ export default function PricingPage() {
                 <Button
                   className="w-full"
                   size="lg"
-                  disabled={loading === plan.priceId}
-                  onClick={() => handleSubscribe(plan.priceId)}
+                  disabled={loading === plan.variantId}
+                  onClick={() => handleSubscribe(plan.variantId || null)}
                 >
-                  {loading === plan.priceId ? 'Processing...' : plan.cta}
+                  {loading === plan.variantId ? 'Processing...' : plan.cta}
                 </Button>
               </CardFooter>
             </Card>

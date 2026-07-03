@@ -2,8 +2,8 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'SwimCheck - AI Swimming Stroke Analysis',
-    short_name: 'SwimCheck',
+    name: 'StrokeLab - AI Swimming Stroke Analysis',
+    short_name: 'StrokeLab',
     description: 'Upload swimming photos and get instant AI-powered feedback on your technique.',
     start_url: '/',
     display: 'standalone',
