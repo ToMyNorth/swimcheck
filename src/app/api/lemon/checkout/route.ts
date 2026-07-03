@@ -1,3 +1,4 @@
+import { lemonSqueezySetup, createCheckout } from '@lemonsqueezy/lemonsqueezy.js';
 import { auth } from '@/app/api/auth/[...nextauth]/route';
 
 export async function POST(request: Request) {
@@ -25,7 +26,11 @@ export async function POST(request: Request) {
       throw new Error('Lemon Squeezy is not configured. Please set environment variables.');
     }
 
-    // Use direct HTTP API call instead of SDK
+    // Setup Lemon Squeezy SDK - this must be called before any API calls
+    lemonSqueezySetup({
+      apiKey: apiKey,
+    });
+
     console.log('Creating checkout with:', {
       storeId,
       variantId,
@@ -35,59 +40,35 @@ export async function POST(request: Request) {
       fullSessionUser: JSON.stringify(session.user),
     });
 
-    const response = await fetch('https://api.lemonsqueezy.com/v1/checkouts', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/vnd.api+json',
-        'Accept': 'application/vnd.api+json',
+    // Use SDK to create checkout
+    const checkout = await createCheckout(storeId, variantId, {
+      customPrice: undefined,
+      productOptions: {
+        redirect_url: `${process.env.NEXTAUTH_URL}/dashboard?success=true`,
+        receipt_link_url: `${process.env.NEXTAUTH_URL}/dashboard`,
       },
-      body: JSON.stringify({
-        data: {
-          type: 'checkouts',
-          attributes: {
-            checkout_data: {
-              custom: {
-                user_id: (session.user as any).id || '',
-                user_email: session.user.email || '',
-              },
-            },
-            product_options: {
-              redirect_url: `${process.env.NEXTAUTH_URL}/dashboard?success=true`,
-              receipt_link_url: `${process.env.NEXTAUTH_URL}/dashboard`,
-            },
-          },
-          relationships: {
-            store: {
-              data: {
-                type: 'stores',
-                id: storeId,
-              },
-            },
-            variant: {
-              data: {
-                type: 'variants',
-                id: variantId.toString(),
-              },
-            },
-          },
+      checkoutOptions: undefined,
+      checkoutData: {
+        custom: {
+          user_id: (session.user as any).id || '',
+          user_email: session.user.email || '',
         },
-      }),
+      },
+      expiresAt: undefined,
+      preview: undefined,
+      testMode: false,
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('Lemon Squeezy API error:', {
-        status: response.status,
-        statusText: response.statusText,
-        body: errorText,
+    if (checkout.error) {
+      console.error('Lemon Squeezy checkout error:', {
+        message: checkout.error.message,
+        cause: checkout.error.cause,
       });
-      throw new Error(`API error: ${response.status} - ${errorText}`);
+      throw new Error(`Checkout failed: ${checkout.error.message}`);
     }
 
-    const data = await response.json();
-    console.log('Checkout created successfully:', data.data?.attributes?.url);
-    return Response.json({ url: data.data.attributes.url });
+    console.log('Checkout created successfully:', checkout.data?.attributes?.url);
+    return Response.json({ url: checkout.data.attributes.url });
   } catch (error) {
     console.error('Lemon Squeezy checkout error:', {
       message: error instanceof Error ? error.message : String(error),
