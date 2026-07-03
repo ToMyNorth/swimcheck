@@ -26,20 +26,6 @@ export async function POST(request: Request) {
       throw new Error('Lemon Squeezy is not configured. Please set environment variables.');
     }
 
-    // Setup Lemon Squeezy SDK - this must be called before any API calls
-    lemonSqueezySetup({
-      apiKey: apiKey,
-    });
-
-    console.log('Creating checkout with:', {
-      storeId,
-      variantId,
-      userId: session.user.id,
-      userEmail: session.user.email,
-      nextAuthUrl: process.env.NEXTAUTH_URL,
-      fullSessionUser: JSON.stringify(session.user),
-    });
-
     // Use SDK to create checkout
     const checkout = await createCheckout(storeId, variantId, {
       productOptions: {
@@ -55,10 +41,7 @@ export async function POST(request: Request) {
     });
 
     if (checkout.error) {
-      console.error('Lemon Squeezy checkout error:', {
-        message: checkout.error.message,
-        cause: checkout.error.cause,
-      });
+      console.error('Lemon Squeezy checkout error:', checkout.error);
       throw new Error(`Checkout failed: ${checkout.error.message}`);
     }
 
@@ -67,11 +50,10 @@ export async function POST(request: Request) {
     const checkoutUrl = checkout.data?.data?.attributes?.url;
     
     if (!checkoutUrl) {
-      console.error('Missing checkout URL. Full response:', JSON.stringify(checkout, null, 2));
+      console.error('Missing checkout URL');
       throw new Error('Checkout URL is missing from response');
     }
     
-    console.log('Checkout created successfully:', checkoutUrl);
     return Response.json({ url: checkoutUrl });
   } catch (error) {
     console.error('Lemon Squeezy checkout error:', {
