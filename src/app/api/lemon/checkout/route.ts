@@ -1,4 +1,4 @@
-import { createCheckout } from '@lemonsqueezy/lemonsqueezy.js';
+import { setup, createCheckout } from '@lemonsqueezy/lemonsqueezy.js';
 import { auth } from '@/app/api/auth/[...nextauth]/route';
 
 export async function POST(request: Request) {
@@ -14,13 +14,18 @@ export async function POST(request: Request) {
       return new Response('Missing variantId', { status: 400 });
     }
 
-    // Initialize Lemon Squeezy
-    const storeId = process.env.LEMON_SQUEEZY_STORE_ID;
+    // Initialize Lemon Squeezy with API key
     const apiKey = process.env.LEMON_SQUEEZY_API_KEY;
+    const storeId = process.env.LEMON_SQUEEZY_STORE_ID;
 
-    if (!storeId || !apiKey) {
+    if (!apiKey || !storeId) {
       throw new Error('Lemon Squeezy is not configured. Please set environment variables.');
     }
+
+    // Setup Lemon Squeezy SDK
+    setup({
+      apiKey: apiKey,
+    });
 
     // Create checkout session
     const checkout = await createCheckout(storeId, variantId, {
