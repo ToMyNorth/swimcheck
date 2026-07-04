@@ -25,6 +25,7 @@ export default function AnalyzePage() {
   const [progress, setProgress] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
   const [savedRecordId, setSavedRecordId] = useState<string | null>(null);
+  const [successfulImageIndices, setSuccessfulImageIndices] = useState<number[]>([]);
   const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
 
   const handleImagesSelected = useCallback((images: UploadedImage[]) => {
@@ -57,6 +58,7 @@ export default function AnalyzePage() {
 
     const allKeypoints: Keypoint[][] = [];
     const allScores: StrokeScores[] = [];
+    const localIndices: number[] = [];
     const failedImages: string[] = [];
 
     try {
@@ -92,6 +94,7 @@ export default function AnalyzePage() {
         // Calculate stroke scores for this image
         const scores = calculateStrokeScores(filtered);
         allScores.push(scores);
+        localIndices.push(i);
 
         console.log(`Image ${i + 1}: Detected ${filtered.filter(kp => kp.visibility > 0.5).length} visible keypoints`);
         console.log('Scores:', scores);
@@ -117,8 +120,20 @@ export default function AnalyzePage() {
         console.warn(`${failedImages.length} image(s) skipped:`, failedImages.join(', '));
       }
 
+      // Compute average scores
+      const avgScores: StrokeScores = {
+        bodyAlignment: Math.round(allScores.reduce((s, sc) => s + sc.bodyAlignment, 0) / allScores.length),
+        armEntryLeft:  Math.round(allScores.reduce((s, sc) => s + sc.armEntryLeft,  0) / allScores.length),
+        armEntryRight: Math.round(allScores.reduce((s, sc) => s + sc.armEntryRight, 0) / allScores.length),
+        headPosition:  Math.round(allScores.reduce((s, sc) => s + sc.headPosition,  0) / allScores.length),
+        bodyRoll:      Math.round(allScores.reduce((s, sc) => s + sc.bodyRoll,      0) / allScores.length),
+        symmetry:      Math.round(allScores.reduce((s, sc) => s + sc.symmetry,      0) / allScores.length),
+        overall:       Math.round(allScores.reduce((s, sc) => s + sc.overall,       0) / allScores.length),
+      };
+
       setKeypointsList(allKeypoints);
       setScoresList(allScores);
+      setSuccessfulImageIndices(localIndices);
       setState('results');
 
       // Save analysis to backend (silent failure)
@@ -128,16 +143,23 @@ export default function AnalyzePage() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             type: 'image',
-            imageUrl: uploadedImages[0]?.preview || null,
-            scores: allScores.length === 1 ? allScores[0] : allScores,
+            imageUrl: uploadedImages[localIndices[0]]?.preview || null,
+            scores: avgScores,
             advice: null,
+            frameData: {
+              imageResults: allScores.map((sc, i) => ({
+                imageIndex: localIndices[i],
+                scores: sc,
+                imageUrl: uploadedImages[localIndices[i]]?.preview || null,
+              })),
+            },
           }),
         });
         
         if (saveRes.ok) {
           const saveData = await saveRes.json();
           setSavedRecordId(saveData.record?.id || null);
-          console.log('Analysis saved with ID:', saveData.record?.id);
+          console.log('Image analysis saved with ID:', saveData.record?.id);
         }
       } catch (err) {
         console.error('Failed to save analysis:', err);
@@ -156,6 +178,7 @@ export default function AnalyzePage() {
     setScoresList([]);
     setError(null);
     setProgress(0);
+    setSuccessfulImageIndices([]);
     imageRefs.current = [];
   };
 
@@ -300,27 +323,30 @@ export default function AnalyzePage() {
           {/* ── Per-image Skeleton Overlay ──────────────────────────────────── */}
           <div className="space-y-6">
             <h2 className="text-xl font-semibold">Skeleton Overlay</h2>
-            {uploadedImages.map((img, idx) => (
-              keypointsList[idx] && (
+            {keypointsList.map((kps, kpsIdx) => {
+              const origIdx = successfulImageIndices[kpsIdx] ?? kpsIdx;
+              const img = uploadedImages[origIdx];
+              if (!img) return null;
+              return (
                 <div key={img.id} className="space-y-2">
                   <div className="flex items-center justify-between">
                     <h3 className="text-sm font-medium text-muted-foreground">
-                      Image {idx + 1}: {img.file.name}
+                      Image {origIdx + 1}: {img.file.name}
                     </h3>
-                    {scoresList[idx] && (
+                    {scoresList[kpsIdx] && (
                       <span className="text-sm font-semibold tabular-nums text-blue-600 dark:text-blue-400">
-                        Score: {scoresList[idx].overall}
+                        Score: {scoresList[kpsIdx].overall}
                       </span>
                     )}
                   </div>
                   <SkeletonOverlay
                     imageSrc={img.preview}
-                    keypoints={keypointsList[idx]}
+                    keypoints={kps}
                     showAngles={true}
                   />
                 </div>
-              )
-            ))}
+              );
+            })}
           </div>
 
           {/* Action buttons */}
