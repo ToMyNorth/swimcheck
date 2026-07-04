@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ScoreCard } from '@/components/ui/ScoreCard';
 import { AICoachSection } from '@/components/report/AICoachSection';
 import type { StrokeScores } from '@/lib/analysis/scorer';
+import { getAnalysisById } from '@/lib/db/supabase';
 
 interface VideoReportPageProps {
   params: Promise<{ id: string }>;
@@ -22,6 +23,7 @@ interface FrameResultData {
   headPosition: number;
   bodyRoll: number;
   symmetry: number;
+  thumbnailUrl?: string;
 }
 
 interface VideoReportData {
@@ -114,15 +116,37 @@ export default async function VideoReportPage({ params, searchParams }: VideoRep
   const { id } = await params;
   const resolved = await searchParams;
 
-  if (!resolved.data) {
-    notFound();
-  }
-
   let reportData: VideoReportData;
-  try {
-    reportData = JSON.parse(resolved.data) as VideoReportData;
-  } catch {
-    notFound();
+
+  if (resolved.data) {
+    // Backwards compat: data passed via URL (immediate navigation from analyze page)
+    try {
+      reportData = JSON.parse(resolved.data) as VideoReportData;
+    } catch {
+      notFound();
+    }
+  } else {
+    // Fetch from database by ID (coming from dashboard history)
+    let record = null;
+    try {
+      record = await getAnalysisById(id);
+    } catch {
+      // DB error — fall through to notFound
+    }
+
+    if (!record || record.type !== 'video' || !record.frame_data) {
+      notFound();
+    }
+
+    const frameData = record.frame_data as { frameResults?: FrameResultData[] };
+    if (!frameData.frameResults || !Array.isArray(frameData.frameResults)) {
+      notFound();
+    }
+
+    reportData = {
+      scores: record.scores as unknown as StrokeScores,
+      frameResults: frameData.frameResults,
+    };
   }
 
   if (!reportData.scores || !reportData.frameResults || !Array.isArray(reportData.frameResults)) {
@@ -262,8 +286,30 @@ export default async function VideoReportPage({ params, searchParams }: VideoRep
           </Card>
         </div>
 
+        {/* Frame Thumbnails (from saved analysis) */}
+        {frameResults.some((f) => f.thumbnailUrl) && (
+          <div className="space-y-3">
+            <h2 className="text-lg font-semibold">Annotated Frames</h2>
+            <p className="text-sm text-muted-foreground">Skeleton overlay snapshots from each analyzed frame</p>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+              {frameResults.filter((f) => f.thumbnailUrl).map((f) => (
+                <div key={f.frameIndex} className="space-y-1">
+                  <div className="overflow-hidden rounded-lg ring-1 ring-foreground/10">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={f.thumbnailUrl} alt={`Frame at ${formatTime(f.timestamp)}`} className="w-full" />
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground">{formatTime(f.timestamp)}</span>
+                    <span className={`font-bold tabular-nums ${scoreColor(f.overall)}`}>{f.overall}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* AI Coach */}
-        <AICoachSection scores={scores} />
+        <AICoachSection scores={scores} analysisId={id} />
 
         {/* Actions */}
         <div className="flex flex-col items-center gap-3 border-t pt-8 sm:flex-row sm:justify-center">

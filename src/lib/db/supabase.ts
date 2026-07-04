@@ -15,18 +15,21 @@ export interface AnalysisRecord {
   id: string;
   user_id: string;
   image_url: string | null;
+  type: 'image' | 'video' | null;
   scores: Record<string, number>;
   advice: Record<string, unknown> | null;
+  frame_data: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;
 }
 
 export interface SaveAnalysisInput {
   userId: string;
-  type?: 'image';
+  type?: 'image' | 'video';
   imageUrl?: string | null;
   scores: Record<string, number>;
   advice?: Record<string, unknown> | null;
+  frameData?: Record<string, unknown> | null;
 }
 
 export async function saveAnalysis(input: SaveAnalysisInput): Promise<AnalysisRecord> {
@@ -38,9 +41,11 @@ export async function saveAnalysis(input: SaveAnalysisInput): Promise<AnalysisRe
     .from('analyses')
     .insert({
       user_id: input.userId,
+      type: input.type || 'image',
       image_url: url,
       scores: input.scores,
       advice: input.advice || null,
+      frame_data: input.frameData || null,
     })
     .select()
     .single();

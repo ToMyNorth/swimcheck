@@ -92,6 +92,36 @@
 3. 开启 "Send me email notifications about..." 所有选项
 4. 这样当出现索引问题或安全问题时，Google 会主动通知你
 
+### 1.5 哥飞方法论补充：新站 SEO 冷启动预期管理
+
+> 以下内容基于哥飞（gefeixiaowang）的出海建站方法论，结合 StrokeLab 项目实际情况整理。
+
+#### "养站"时间节奏表
+
+哥飞反复强调，SEO 是一个需要耐心的长期过程，新站从上线到稳定变现有明确的时间节奏：
+
+| 阶段 | 时间 | 预期 | StrokeLab 对应动作 |
+|------|------|------|-------------------|
+| 上线到首次收录 | 1-2 周 | Google 开始索引页面 | 提交 GSC + Sitemap，手动请求索引 |
+| 首批长尾词排名 | 2-4 周 | 长尾词进入前 50 | 观察 GSC Performance 中的 Queries |
+| 稳定自然流量 | 1-3 个月 | 日均几十到几百 UV | 持续发布博客 + 外链建设 |
+| 养站成熟期 | 3-6 个月 | 稳定排名和收入 | 程序化 SEO + 订阅转化优化 |
+
+#### 哥飞的"四心"理念
+
+哥飞认为做好 SEO 需要 **决心、信心、耐心、恒心**。SEO 是一门依赖实践的技艺，不是看了教程就会的。StrokeLab 已完成代码层 SEO 优化（动态 Sitemap、Metadata、JSON-LD 等），技术基础扎实，提交 GSC 后需等待 1-2 周观察首批索引情况，不要因为短期内没有流量而焦虑。
+
+#### StrokeLab 当前状态评估
+
+- ✅ 代码层 SEO 已完成（Sitemap、Metadata、JSON-LD、Canonical URL 等）
+- ⏳ 待操作：GSC 属性验证 + Sitemap 提交 + 手动请求索引
+- 📊 预期：提交后 1-2 周内可在 `site:strokelab.app` 看到首批收录结果
+
+#### 🔴 高优先级行动
+
+- **每周记录 GSC 数据**：进入 GSC → Performance，记录 Impressions 和 Clicks 数据，建立基线。建议用 Google Sheets 做一个简单的周报模板，追踪周环比变化
+- **建立 SEO 日志**：记录每次操作（提交 Sitemap 日期、发布博客日期、外链建设日期），方便后续复盘因果关系
+
 ---
 
 ## 二、数据分析与监控
@@ -502,6 +532,114 @@ AI 工具目录是近年来新兴的高权重流量入口。用户通过 "AI swi
 - 如有新的高权重 AI 目录出现，及时提交收录
 - 监控 GA4 Referral 数据，评估各目录的流量贡献
 
+#### 哥飞方法论补充：外链建设实战技巧
+
+> 以下内容基于哥飞社群分享的外链建设实战经验，针对 StrokeLab 项目具体化。
+
+**"抄作业"方法**：哥飞社群成员 BBQ 夫妇分享的核心策略——每天用 Ahrefs/Semrush 分析竞争对手的外链来源，照着一个个做。每个新站上线后立即做上百个外链，不要等“准备好了”再开始。
+
+**高 DR 值免费外链渠道（社群总结）：**
+
+| 渠道 | 域名权重 | 成本 | 操作步骤 | 优先级 |
+|------|---------|------|---------|--------|
+| Stripe Climate 捐赠 | DR 94 | 0.1% 捐赠 | 注册 Stripe → 开启 Climate → 自动获得高 DR 外链 | 🔴 高 |
+| Hacker News Show | DR 90+ | 免费 | 提交 "Show HN: I built an AI swimming stroke analysis tool" 帖子 | 🔴 高 |
+| Chrome 插件商店 | DR 99 | $5 注册费 | 将 StrokeLab 做成简单 Chrome 插件提交 **[需开发]** | 🟡 中 |
+| AI 导航站批量收录 | DR 40-75 | 免费 | 见 3.5 节 AI 工具目录清单，一次性全部提交 | 🔴 高 |
+| GitHub Awesome 列表 | DR 90+ | 免费 | 找到 awesome-ai-tools、awesome-swimming 等仓库，提交 PR | 🔴 高 |
+
+**操作步骤（以 Hacker News Show 为例）：**
+
+1. 注册 Hacker News 账号（需等待一定时间才能发帖）
+2. 发布标题：`Show HN: I built an AI tool that analyzes swimming strokes using pose detection`
+3. URL 填写 `https://strokelab.app`
+4. 在评论区准备好技术细节回答（MediaPipe + LLM 实现方式）
+5. 发布时间：太平洋时间上午 8-10 点，周二至周四
+
+**🔴 高优先级行动：**
+- 上线第一周完成 Hacker News Show 提交 + 全部 AI 目录收录（见 3.5 节）
+- 完成 Stripe Climate 开启
+
+**🟡 中优先级行动：**
+- 研究游泳类竞品（如 SwimEye、Technique AI 等）的反向链接来源，用 Ahrefs 免费版查看，逐个复制
+- 探索 Chrome 插件方案的可行性
+
+#### 哥飞方法论补充：程序化 SEO 与长尾关键词批量生产
+
+> 以下内容基于哥飞的程序化 SEO 核心理念，针对 StrokeLab 项目具体化。
+
+**核心理念："一句话需求做页面"**——找到大量相似长尾关键词，创建页面模板 + 数据库，批量生成页面。哥飞常举的案例：picturethisai.com 拥有 500 万个页面，单页最多几百访问，但累计月访问量 150 万。
+
+**针对 StrokeLab 的具体建议 [需开发]：**
+
+创建 `/tools/[tool-name]` 路由，批量生成工具页面：
+
+| 页面路径 | 目标关键词 | 页面标题 |
+|---------|---------|----------|
+| `/tools/freestyle-stroke-analyzer` | freestyle stroke analyzer | Free Freestyle Stroke Analyzer Online |
+| `/tools/breaststroke-technique-checker` | breaststroke technique checker | Breaststroke Technique Checker - AI Powered |
+| `/tools/butterfly-form-evaluator` | butterfly form evaluator | Butterfly Swimming Form Evaluator |
+| `/tools/swim-posture-checker` | swimming posture checker | Swimming Posture Checker - Free AI Analysis |
+| `/tools/backstroke-start-analyzer` | backstroke start analyzer | Backstroke Start Analyzer Online |
+| `/tools/swim-turn-technique-tool` | swim turn technique tool | Swimming Turn Technique Analyzer |
+| ... | ... | 共 20-50 个长尾词页面 |
+
+每个页面使用统一模板，但标题、描述、H1、CTA 不同。每个页面都是一个独立的 SEO 入口，最终指向主分析工具。
+
+**KGR（关键词黄金比例）公式应用：**
+
+```
+KGR = allintitle 搜索结果数 / 月搜索量（搜索量须 < 250）
+```
+
+| KGR 值 | 判断 | 预期 |
+|--------|------|------|
+| KGR < 0.25 | 值得做 | 几天内就有排名 |
+| 0.25 < KGR < 1 | 有难度 | 需要时间积累 |
+| KGR > 1 | 放弃 | 竞争太激烈 |
+
+**操作步骤：**
+1. 在 Google 搜索 `allintitle:freestyle stroke analyzer free online`，统计结果数
+2. 用 Google Keyword Planner 或 Ubersuggest 查询月搜索量
+3. 计算 KGR，筛选 < 0.25 的关键词优先做页面
+
+**"低 KD 多内页"打法（农村包围城市）：**
+
+- **不做大词**（如 "swimming analysis"），新站没权重排不上
+- **做大量低竞争长尾内页**，每页几十搜索量，100 个页面累计几千月访问
+- **词根扩展法**：一个主词 + 后缀裂变
+  - 主词 `swimming stroke` + Analyzer / Checker / Calculator / Tool / Coach / Evaluator / Generator
+  - 主词 `freestyle technique` + Analyzer / Tips / Guide / Correction / Assessment
+  - 主词 `breaststroke form` + Checker / Evaluator / Improvement / Analysis
+
+**🔴 高优先级——这是工具站流量增长的核心引擎**
+
+**预期效果：** 开发完成后 2-3 个月内，长尾页面累计贡献 30-50% 的总自然流量。
+
+#### 哥飞方法论补充：导航站外链的优先级判断
+
+> 以下内容基于哥飞社群经验，补充导航站外链的优先级策略。
+
+哥飞社群经验：导航站外链是"一次性投入、长期回报"的高 ROI 动作。除了 3.5 节已列出的 10 个 AI 目录，还应关注以下渠道：
+
+| 平台 | 类型 | 说明 | 优先级 |
+|------|------|------|--------|
+| GitHub Awesome 列表 | 开源社区 | 如 awesome-ai-tools、awesome-machine-learning，提交 PR 免费获取高 DR 外链 | 🔴 高 |
+| SaaS 评测站 | 如 G2、Capterra | 适合有订阅模式的工具，提交产品 Listing | 🟡 中 |
+| Dev.to / Hashnode | 技术博客平台 | 发布技术文章（如 "Building an AI Swim Coach with MediaPipe + LLM"），自然嵌入链接 | 🟡 中 |
+| Indie Hackers | 独立开发者社区 | 发布产品故事，分享开发过程 | 🟡 中 |
+| BetaList | 新产品目录 | 适合早期产品提交 | 🟡 中 |
+
+哥飞建议："提前注册好海外各种媒体、社区、服务的账号，并时常登录保持活跃。" 这意味着不要等到需要发外链时才注册账号，平时就要维护这些平台的存在感。
+
+**🔴 高优先级行动：**
+- 第一周完成 GitHub Awesome 列表 PR 提交（至少 3-5 个相关仓库）
+- 第一周发布 Dev.to 技术文章 1 篇（如 "How I Built an AI Swimming Coach with MediaPipe and LLMs"）
+
+**🟡 中优先级行动：**
+- 第二周完成 G2/Capterra 产品提交
+- 持续在 Dev.to/Hashnode 发布技术文章（每月 1-2 篇）
+
 ---
 
 ## 四、Google AdSense 申请准备 Checklist
@@ -572,6 +710,60 @@ import Script from 'next/script'
 
 > ⚠️ **重要原则**：广告绝不能影响核心用户体验。分析工具的使用流程（上传→分析→查看结果）中不应出现广告干扰。博客文章是展示广告的最佳位置。
 
+### 4.5 哥飞方法论补充：变现升级策略
+
+> 以下内容基于哥飞 2025 年 12 月 SEO 大会核心观点及社群经验，结合 StrokeLab 项目具体化。
+
+#### 核心观点：超越 AdSense，追求更高天花板
+
+哥飞明确指出：“放弃低天花板的 AdSense，选择付费订阅等更高潜力的变现方式。” AdSense 只是基础变现手段，对于 StrokeLab 这样的 AI 工具站，订阅付费才是核心收入来源。
+
+#### 哥飞变现方式对比（每 1000 UV 收入）
+
+| 方式 | 收入 | 适用 StrokeLab？ | 说明 |
+|------|------|----------------|------|
+| AdSense 广告 | $5-20 | ✅ 博客/免费用户页面 | 低门槛，但天花板低 |
+| 订阅付费 | $10-120+ | ✅ **核心变现方式** | 高天花板，稳定 MRR |
+| 混合模式 | 最高 | ✅ **推荐** | 订阅为主 + 博客页广告补充 |
+
+#### StrokeLab 变现公式（基于哥飞方法论）
+
+```
+收入 = 流量 × 付费转化率 × ARPPU × 生命周期
+```
+
+- 目标：每 1000 新注册用户，订阅可带来 $120/月，广告仅 $20
+- 订阅 vs 广告收入比应为 **6:1 以上**
+- 重点优化付费转化率和用户留存，而非单纯追求流量
+
+#### AdSense 申请时机优化
+
+- 哥飞指出：网上说域名注册 3 个月才能申请，但流量大、内容充实的网站可以更早
+- **建议时机**：日均 UV 100+ 且有 10+ 篇博客文章后再申请
+- **申请前确保**：About 和 Contact 页面存在 **[需开发]**
+- 申请前检查所有博客文章质量，确保每篇 1000 字以上、无抄袭
+
+#### 定价建议（社群经验）
+
+- **定价不低于 $19/月**：低价产品手续费吃利润，不值得
+- **高价 + 优惠券 > 低价无优惠**：用户心理感受更好，且有促销空间
+- **年费默认勾选**：提高 LTV，降低流失率
+- 建议设置 $19/月、$149/年（相当于 $12.4/月）两档，年费显示为默认选项
+
+#### 广告位补充建议 [推演建议，基于哥飞核心理念合理推断]
+
+- **高 CPC 内容方向**：在博客中写 "best swimming equipment"、"swim coaching software comparison" 等对比类文章（SaaS/Tech 类关键词 CPC 更高）
+- **SEO 流量 RPM 通常 $4-10**，社交媒体 RPM 仅 $0.8-2 → 优先发展 SEO 流量
+- **CTR 低于 0.5% 的广告位应删除**：低 CTR 广告位影响用户体验，收益微薄
+
+#### 🔴 高优先级——变现是整个项目的终极目标
+
+**行动清单：**
+- [ ] 确认订阅定价策略（不低于 $19/月，年费默认勾选）
+- [ ] 在达到日均 100 UV + 10 篇博客后申请 AdSense
+- [ ] 开发 About 和 Contact 页面 **[需开发]**
+- [ ] 规划 2-3 篇高 CPC 对比类博客文章
+
 ---
 
 ## 五、持续优化 Checklist
@@ -609,6 +801,89 @@ import Script from 'next/script'
 - [ ] 评估整体内容策略是否需要调整方向
 - [ ] 回顾年度流量和收入数据，制定下一年增长计划
 - [ ] 检查并更新 Privacy Policy 和 Terms of Service
+
+## 七、哥飞方法论补充：工具站出海整体战略
+
+> 以下章节基于哥飞方法论的核心理念，为 StrokeLab 项目定制的整体战略规划。
+
+### 7.1 "养网站防老"理念与 StrokeLab 定位
+
+哥飞核心理念：“做网站就像种果树，先种一棵，再种第二棵，慢慢形成果园。这些果树会持续产出果实（被动收入）。”
+
+**StrokeLab 在哥飞框架中的定位：**
+
+| 维度 | 评估 |
+|------|------|
+| 类型 | **AI 工具站**（1000 UV 变现 $10-100+，高于小游戏站和纯内容站） |
+| 优势 | 已有 MediaPipe + LLM 技术壁垒，不是简单的 wrapper |
+| 策略 | 先做好 StrokeLab 这一个站，验证模式后可用相同技术栈扩展 |
+| 护城河 | 技术实现复杂度高，不容易被复制 |
+
+### 7.2 用户增长路径（哥飞框架适配）
+
+| 阶段 | 时间 | 核心动作 | 目标指标 |
+|------|------|---------|----------|
+| 冷启动 | 第 1-2 周 | GSC 提交 + AI 目录收录 + Reddit/HN 发布 | 首批收录 + 100 DAU |
+| SEO 爬坡 | 第 1-3 个月 | 博客内容生产 + 长尾页面建设 + 外链建设 | 500 DAU + 首批 AdSense |
+| 增长加速 | 第 3-6 个月 | 程序化 SEO 页面批量上线 + 社交媒体矩阵 | 2000 DAU + 订阅转化 |
+| 稳定变现 | 6 个月+ | 内容更新维护 + 新功能迭代 + 变现优化 | 稳定 MRR + AdSense |
+
+### 7.3 矩阵扩展建议（长期）
+
+- 哥飞鼓励"先上 10 个站"，但 StrokeLab 当前应**专注做好一个站**
+- 当 StrokeLab 月入稳定后，可考虑：
+  - **扩展同技术栈工具站**（如 AI 瑜伽姿势分析、AI 高尔夫挥杆分析）[推演建议，基于哥飞核心理念合理推断]
+  - **使用子目录（非子域名）做多语言版本**，权重集中 **[需开发]**
+  - 哥飞明确建议：多语言用子目录 + hreflang 标签，不用子域名（权重分散）
+- 🟢 **低优先级——当前阶段专注单站**
+
+### 7.4 "新词"挖掘策略（针对游泳/AI 领域）
+
+哥飞最核心策略：“捷径是找到刚出现的‘新词’，此时竞争少，哪怕做得一般也能拿到排名。”
+
+**针对 StrokeLab 的新词来源：**
+
+| 来源 | 操作 | 示例 |
+|------|------|------|
+| AI 新模型发布 | 新 pose estimation 模型发布时，立即写评测/对比文章 | "MediaPipe vs MoveNet for Swimming Analysis" |
+| 游泳赛事热点 | 奥运、世锦赛期间快速发布分析类文章 | "AI Analysis of Leon Marchand's Butterfly Stroke" |
+| Google Trends | 监控 "AI swimming" 相关上升趋势词 | 发现 "swim AI coach" 搜索量突增，立即做页面 |
+| 社交媒体热点 | Twitter/Reddit 上游泳相关话题爆发 | 某个游泳技术话题火了，快速写博客 |
+
+**新词判断方法：**
+1. 在 Google 搜索关键词
+2. 查看搜索结果中是否有近 30 天内发布的内容
+3. 如果有大量新内容，说明是新词，值得快速进入
+4. 如果搜索结果都是旧内容，说明已有稳定竞争格局
+
+**🔴 高优先级：**
+- 每月至少做 1 次新词挖掘
+- 发现机会后 **48 小时内**发布对应内容（新词窗口期短）
+- 设置 Google Alerts 监控 "AI swimming"、"swimming analysis" 等关键词
+
+### 7.5 核心公式与 KPI 看板
+
+**核心公式：**
+
+```
+SEO = Contents(80%) + Backlinks(20%) + Technical(基本功)
+收入 = 流量 × 付费转化率 × ARPPU × 生命周期
+KGR = allintitle 结果数 / 月搜索量（< 250 才值得做）
+```
+
+**月度 KPI 看板（建议第 3 个月达到的目标）：**
+
+| 指标 | 数据来源 | 月度目标（第 3 个月） |
+|------|---------|---------------------|
+| Google 收录页面数 | GSC → Coverage | 50+ |
+| 自然搜索点击量 | GSC → Performance | 500+ |
+| 日均独立访客 | GA4 | 500+ |
+| 付费订阅用户 | Stripe Dashboard | 20+ |
+| 博客文章数 | 手动统计 | 12+ |
+| 外链数量 | Ahrefs/GSC Links | 100+ |
+| AdSense 月收入 | AdSense Dashboard | $50+（如已通过审核） |
+
+**🔴 高优先级：** 建立 Google Sheets KPI 看板，每月更新一次，追踪上述所有指标的变化趋势。
 
 ---
 
@@ -650,3 +925,4 @@ import Script from 'next/script'
 | 图片 lazy loading | ✅ 已完成 | `src/app/page.tsx` | 图片使用 `loading="lazy"` |
 | 语义化 HTML | ✅ 已完成 | 各页面 | 使用 `<section>`、`<h1>`-`<h3>` 等语义标签 |
 | Mobile-friendly | ✅ 已完成 | Tailwind CSS 响应式设计 | 移动端友好 |
+| OG 社交分享图 | ✅ 已完成 | `src/app/opengraph-image.tsx` | 动态生成 1200x630 品牌分享图 |

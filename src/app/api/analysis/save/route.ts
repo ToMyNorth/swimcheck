@@ -16,14 +16,15 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { imageUrl, scores, advice } = body;
+    const { type, imageUrl, scores, advice, frameData } = body;
 
     const record = await saveAnalysis({
       userId: session.user.id,
-      type: 'image',
+      type: type || 'image',
       imageUrl: imageUrl || null,
       scores,
       advice,
+      frameData: frameData || null,
     });
 
     // Return updated quota

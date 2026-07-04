@@ -54,6 +54,7 @@ export default function VideoAnalyzePage() {
   const [progressText, setProgressText] = useState('');
   const [showPaywall, setShowPaywall] = useState(false);
   const [skippedFrames, setSkippedFrames] = useState(0);
+  const [savedRecordId, setSavedRecordId] = useState<string | null>(null);
 
   const handleVideoSelected = useCallback((video: UploadedVideo) => {
     setUploadedVideo(video);
@@ -187,17 +188,37 @@ export default function VideoAnalyzePage() {
       setAverageScores(avgScores);
       setState('results');
 
-      // Save analysis to backend (silent failure)
+      // Save analysis to backend with full frame data (silent failure)
       try {
-        await fetch('/api/analysis/save', {
+        const saveRes = await fetch('/api/analysis/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            type: 'video',
             imageUrl: null,
             scores: avgScores,
             advice: null,
+            frameData: {
+              frameResults: frameResults.map((r) => ({
+                frameIndex: r.frame.frameIndex,
+                timestamp: r.frame.timestamp,
+                overall: r.scores.overall,
+                bodyAlignment: r.scores.bodyAlignment,
+                armEntryLeft: r.scores.armEntryLeft,
+                armEntryRight: r.scores.armEntryRight,
+                headPosition: r.scores.headPosition,
+                bodyRoll: r.scores.bodyRoll,
+                symmetry: r.scores.symmetry,
+                thumbnailUrl: r.thumbnailUrl,
+              })),
+            },
           }),
         });
+        if (saveRes.ok) {
+          const saveData = await saveRes.json();
+          setSavedRecordId(saveData.record?.id || null);
+          console.log('Video analysis saved with ID:', saveData.record?.id);
+        }
       } catch (err) {
         console.error('Failed to save video analysis:', err);
       }
@@ -217,6 +238,7 @@ export default function VideoAnalyzePage() {
     setProgress(0);
     setProgressText('');
     setSkippedFrames(0);
+    setSavedRecordId(null);
   };
 
   // Find best and worst frames
@@ -522,22 +544,8 @@ export default function VideoAnalyzePage() {
               variant="default"
               onClick={() => {
                 if (!averageScores) return;
-                const data = {
-                  scores: averageScores,
-                  frameResults: results.map((r) => ({
-                    frameIndex: r.frame.frameIndex,
-                    timestamp: r.frame.timestamp,
-                    overall: r.scores.overall,
-                    bodyAlignment: r.scores.bodyAlignment,
-                    armEntryLeft: r.scores.armEntryLeft,
-                    armEntryRight: r.scores.armEntryRight,
-                    headPosition: r.scores.headPosition,
-                    bodyRoll: r.scores.bodyRoll,
-                    symmetry: r.scores.symmetry,
-                  })),
-                };
-                const encoded = encodeURIComponent(JSON.stringify(data));
-                router.push(`/report/video/temp-video-id?data=${encoded}`);
+                const recordId = savedRecordId || 'temp-video-id';
+                router.push(`/report/video/${recordId}`);
               }}
               className="gap-2"
             >

@@ -6,7 +6,7 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import Link from 'next/link';
-import { BarChart3, LogOut, CreditCard } from 'lucide-react';
+import { BarChart3, CreditCard, Camera, Video } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 
 export const metadata: Metadata = {
@@ -101,43 +101,82 @@ export default async function DashboardPage() {
           {analyses.length === 0 ? (
             <div className="text-center py-8">
               <p className="text-muted-foreground mb-4">
-                No analyses yet. Upload your first swimming photo to get started!
+                No analyses yet. Upload your first swimming photo or video to get started!
               </p>
-              <Link href="/analyze" className={buttonVariants()}>
-                Analyze Your First Photo
-              </Link>
+              <div className="flex items-center justify-center gap-3">
+                <Link href="/analyze" className={buttonVariants()}>
+                  <Camera className="h-4 w-4 mr-1" />
+                  Photo Analysis
+                </Link>
+                <Link href="/analyze/video" className={buttonVariants({ variant: 'outline' })}>
+                  <Video className="h-4 w-4 mr-1" />
+                  Video Analysis
+                </Link>
+              </div>
             </div>
           ) : (
             <div className="space-y-4">
-              {analyses.map((analysis) => (
-                <div
-                  key={analysis.id}
-                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border rounded-lg p-4 hover:bg-accent/50 transition-colors"
-                >
-                  <div>
-                    <p className="font-medium">
-                      {new Date(analysis.created_at).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      Overall Score:{' '}
-                      <span className="font-semibold text-foreground">
-                        {analysis.scores?.overall ?? 'N/A'}
-                      </span>
-                      /100
-                    </p>
-                  </div>
-                  <Link
-                    href={`/report/${analysis.id}?scores=${encodeURIComponent(JSON.stringify(analysis.scores))}`}
-                    className={buttonVariants({ variant: 'outline', size: 'sm' })}
+              {analyses.map((analysis) => {
+                const isVideo = analysis.type === 'video';
+                const reportHref = isVideo
+                  ? `/report/video/${analysis.id}`
+                  : `/report/${analysis.id}?scores=${encodeURIComponent(JSON.stringify(analysis.scores))}`;
+                return (
+                  <div
+                    key={analysis.id}
+                    className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border rounded-lg p-4 hover:bg-accent/50 transition-colors"
                   >
-                    View Report
-                  </Link>
-                </div>
-              ))}
+                    <div className="flex items-start gap-3">
+                      {/* Type icon */}
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-lg shrink-0 ${
+                        isVideo ? 'bg-purple-100 dark:bg-purple-950/40' : 'bg-blue-100 dark:bg-blue-950/40'
+                      }`}>
+                        {isVideo ? (
+                          <Video className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                        ) : (
+                          <Camera className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                        )}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium">
+                            {new Date(analysis.created_at).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            })}
+                          </p>
+                          <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                            isVideo
+                              ? 'bg-purple-100 text-purple-700 dark:bg-purple-950/50 dark:text-purple-300'
+                              : 'bg-blue-100 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300'
+                          }`}>
+                            {isVideo ? 'Video' : 'Photo'}
+                          </span>
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-0.5">
+                          Overall Score:{' '}
+                          <span className="font-semibold text-foreground">
+                            {analysis.scores?.overall ?? 'N/A'}
+                          </span>
+                          /100
+                          {isVideo && analysis.frame_data && (
+                            <span className="ml-2">
+                              • {(analysis.frame_data as { frameResults?: unknown[] })?.frameResults?.length ?? 0} frames
+                            </span>
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                    <Link
+                      href={reportHref}
+                      className={buttonVariants({ variant: 'outline', size: 'sm' })}
+                    >
+                      View Report
+                    </Link>
+                  </div>
+                );
+              })}
             </div>
           )}
         </CardContent>
