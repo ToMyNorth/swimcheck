@@ -61,7 +61,8 @@ export default function VideoAnalyzePage() {
   }, []);
 
   const startAnalysis = async () => {
-    if (!uploadedVideo) return;
+    // Guard: prevent repeated or empty submissions
+    if (!uploadedVideo || state !== 'upload' || error) return;
 
     // Check quota before analysis
     try {
@@ -261,9 +262,14 @@ export default function VideoAnalyzePage() {
 
           {uploadedVideo && (
             <div className="flex justify-center">
-              <Button size="lg" onClick={startAnalysis} className="gap-2 px-8">
+              <Button
+                size="lg"
+                onClick={startAnalysis}
+                disabled={!!error}
+                className="gap-2 px-8"
+              >
                 <Video className="h-4 w-4" />
-                Start Video Analysis
+                {error ? 'Upload New Video to Retry' : 'Start Video Analysis'}
               </Button>
             </div>
           )}

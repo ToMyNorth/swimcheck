@@ -33,7 +33,8 @@ export default function AnalyzePage() {
   }, []);
 
   const startAnalysis = async () => {
-    if (uploadedImages.length === 0) return;
+    // Guard: prevent repeated or empty submissions
+    if (uploadedImages.length === 0 || state !== 'upload' || error) return;
 
     // Check quota before analysis
     try {
@@ -209,8 +210,13 @@ export default function AnalyzePage() {
 
           {uploadedImages.length > 0 && (
             <div className="flex justify-center">
-              <Button size="lg" onClick={startAnalysis} className="gap-2 px-8">
-                Start Analysis
+              <Button
+                size="lg"
+                onClick={startAnalysis}
+                disabled={!!error}
+                className="gap-2 px-8"
+              >
+                {error ? 'Upload New Images to Retry' : 'Start Analysis'}
               </Button>
             </div>
           )}
