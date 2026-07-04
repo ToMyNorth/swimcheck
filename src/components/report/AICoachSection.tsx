@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useState } from 'react';
+import React, { use, useState } from 'react';
 import { CheckCircle2, AlertTriangle, Target, Lightbulb, ChevronDown, ChevronUp } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -176,11 +176,45 @@ function AdviceContent({ advice }: { advice: SwimmingAdvice }) {
 }
 
 export function AICoachSection({ advicePromise }: AICoachSectionProps) {
-  try {
-    const advice = use(advicePromise);
-    return <AdviceContent advice={advice} />;
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Failed to generate advice';
+  const [advice, setAdvice] = useState<SwimmingAdvice | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Use useEffect to handle the promise asynchronously
+  React.useEffect(() => {
+    let mounted = true;
+    
+    advicePromise
+      .then((result) => {
+        if (mounted) {
+          setAdvice(result);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (mounted) {
+          setError(err instanceof Error ? err.message : 'Failed to generate advice');
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, [advicePromise]);
+
+  if (loading) {
+    return (
+      <Card>
+        <CardContent className="flex flex-col items-center gap-4 py-10">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <p className="text-sm text-muted-foreground">Generating AI advice...</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
     return (
       <Card className="border-destructive/30">
         <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
@@ -189,7 +223,7 @@ export function AICoachSection({ advicePromise }: AICoachSectionProps) {
           </div>
           <div>
             <h3 className="font-semibold">Unable to Generate Advice</h3>
-            <p className="mt-1 text-sm text-muted-foreground">{message}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{error}</p>
           </div>
           <Button
             variant="outline"
@@ -202,4 +236,10 @@ export function AICoachSection({ advicePromise }: AICoachSectionProps) {
       </Card>
     );
   }
+
+  if (!advice) {
+    return null;
+  }
+
+  return <AdviceContent advice={advice} />;
 }

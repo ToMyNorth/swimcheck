@@ -55,9 +55,8 @@ export async function generateAdvice(scores: StrokeScores): Promise<SwimmingAdvi
 
   try {
     const completion = await openai.chat.completions.create({
-      // Use free model to avoid payment requirement
-      // Options: mistralai/mistral-7b-instruct:free, google/gemma-2-9b-it:free, meta-llama/llama-3.1-8b-instruct:free
-      model: 'meta-llama/llama-3.1-8b-instruct:free', // Free model, no credit card required
+      // Use Anthropic Claude Sonnet 4 for stable, high-quality analysis
+      model: 'anthropic/claude-sonnet-4',
       messages: [
         { role: 'system', content: 'You are a professional swimming coach with ASCA Level 3 certification.' },
         { role: 'user', content: prompt },
@@ -110,7 +109,7 @@ export async function generateVideoAdvice(
     .replace('{overall}', averageScores.overall.toString());
 
   const completion = await openai.chat.completions.create({
-    model: 'openai/gpt-4o-mini', // OpenRouter 格式：provider/model
+    model: 'anthropic/claude-sonnet-4', // Anthropic Claude Sonnet 4
     messages: [
       { role: 'system', content: 'You are a professional swimming coach with ASCA Level 3 certification.' },
       { role: 'user', content: prompt },
