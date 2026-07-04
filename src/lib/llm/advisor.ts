@@ -71,8 +71,18 @@ export async function generateAdvice(scores: StrokeScores): Promise<SwimmingAdvi
 
     console.log('OpenRouter API call successful');
 
-    const content = completion.choices[0].message.content;
+    let content = completion.choices[0].message.content;
     if (!content) throw new Error('No advice generated');
+
+    // Handle markdown code blocks (some models wrap JSON in ```json ... ```)
+    content = content.trim();
+    if (content.startsWith('```')) {
+      // Remove opening ```json or ```
+      content = content.replace(/^```(?:json)?\s*/, '');
+      // Remove closing ```
+      content = content.replace(/```$/, '');
+      content = content.trim();
+    }
 
     return JSON.parse(content) as SwimmingAdvice;
   } catch (error) {
@@ -123,8 +133,18 @@ export async function generateVideoAdvice(
     max_tokens: 2000,
   });
 
-  const content = completion.choices[0].message.content;
+  let content = completion.choices[0].message.content;
   if (!content) throw new Error('No advice generated');
+
+  // Handle markdown code blocks (some models wrap JSON in ```json ... ```)
+  content = content.trim();
+  if (content.startsWith('```')) {
+    // Remove opening ```json or ```
+    content = content.replace(/^```(?:json)?\s*/, '');
+    // Remove closing ```
+    content = content.replace(/```$/, '');
+    content = content.trim();
+  }
 
   return JSON.parse(content) as SwimmingAdvice;
 }
