@@ -7,13 +7,6 @@ import { Progress } from '@/components/ui/progress';
 import Link from 'next/link';
 import { BarChart3, LogOut, CreditCard } from 'lucide-react';
 import { signOut } from 'next-auth/react';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Dashboard - StrokeLab Swimming Analysis',
-  description: 'View your swimming analysis history and track your progress over time.',
-  robots: { index: false },
-};
 
 export default async function DashboardPage() {
   const session = await auth();

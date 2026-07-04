@@ -7,20 +7,6 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Check } from 'lucide-react';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: 'Pricing - StrokeLab AI Swimming Analysis',
-  description: 'Choose the perfect plan for your swimming improvement. Free tier includes 3 analyses/month. Pro plans unlock unlimited AI-powered stroke analysis.',
-  openGraph: {
-    title: 'StrokeLab Pricing Plans',
-    description: 'Affordable AI-powered swimming analysis starting at $4.99/month',
-    url: '/pricing',
-    siteName: 'StrokeLab',
-    type: 'website',
-  },
-  alternates: { canonical: '/pricing' },
-};
 
 const plans = [
   {
