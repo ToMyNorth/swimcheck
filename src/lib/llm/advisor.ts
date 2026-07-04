@@ -42,6 +42,8 @@ function getOpenAI(): any {
 export async function generateAdvice(scores: StrokeScores): Promise<SwimmingAdvice> {
   const openai = getOpenAI();
 
+  console.log('Generating advice with scores:', JSON.stringify(scores));
+
   const prompt = SWIMMING_ADVISOR_PROMPT
     .replace('{bodyAlignment}', scores.bodyAlignment.toString())
     .replace('{armEntryLeft}', scores.armEntryLeft.toString())
@@ -51,21 +53,28 @@ export async function generateAdvice(scores: StrokeScores): Promise<SwimmingAdvi
     .replace('{symmetry}', scores.symmetry.toString())
     .replace('{overall}', scores.overall.toString());
 
-  const completion = await openai.chat.completions.create({
-    model: 'openai/gpt-4o-mini', // OpenRouter 格式：provider/model
-    messages: [
-      { role: 'system', content: 'You are a professional swimming coach with ASCA Level 3 certification.' },
-      { role: 'user', content: prompt },
-    ],
-    response_format: { type: 'json_object' },
-    temperature: 0.7,
-    max_tokens: 1500,
-  });
+  try {
+    const completion = await openai.chat.completions.create({
+      model: 'openai/gpt-4o-mini', // OpenRouter 格式：provider/model
+      messages: [
+        { role: 'system', content: 'You are a professional swimming coach with ASCA Level 3 certification.' },
+        { role: 'user', content: prompt },
+      ],
+      response_format: { type: 'json_object' },
+      temperature: 0.7,
+      max_tokens: 1500,
+    });
 
-  const content = completion.choices[0].message.content;
-  if (!content) throw new Error('No advice generated');
+    console.log('OpenRouter API call successful');
 
-  return JSON.parse(content) as SwimmingAdvice;
+    const content = completion.choices[0].message.content;
+    if (!content) throw new Error('No advice generated');
+
+    return JSON.parse(content) as SwimmingAdvice;
+  } catch (error) {
+    console.error('OpenRouter API call failed:', error);
+    throw error;
+  }
 }
 
 export interface VideoFrameScore {

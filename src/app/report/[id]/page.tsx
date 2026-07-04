@@ -87,10 +87,11 @@ export default async function ReportPage({ params, searchParams }: ReportPagePro
   let advicePromise: Promise<SwimmingAdvice>;
   try {
     advicePromise = generateAdvice(scores);
-  } catch {
-    // If API key is missing, provide a fallback
+  } catch (error) {
+    console.error('Failed to initialize advice generation:', error);
+    // If API key is missing or other initialization error, provide a fallback
     advicePromise = Promise.reject(
-      new Error('OpenAI API key not configured. Please add OPENAI_API_KEY to your .env.local file.')
+      new Error('AI advice generation failed. Please check your OPENAI_API_KEY configuration.')
     );
   }
 
