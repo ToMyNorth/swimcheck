@@ -84,15 +84,18 @@ export default async function ReportPage({ params, searchParams }: ReportPagePro
   }
 
   // Generate AI advice (server-side)
-  let advicePromise: Promise<SwimmingAdvice>;
+  let advicePromise: Promise<SwimmingAdvice> | null = null;
   try {
-    advicePromise = generateAdvice(scores);
+    // Only generate advice if OPENAI_API_KEY is configured
+    if (process.env.OPENAI_API_KEY) {
+      advicePromise = generateAdvice(scores);
+    } else {
+      console.log('OPENAI_API_KEY not configured, skipping AI advice generation');
+    }
   } catch (error) {
     console.error('Failed to initialize advice generation:', error);
-    // If API key is missing or other initialization error, provide a fallback
-    advicePromise = Promise.reject(
-      new Error('AI advice generation failed. Please check your OPENAI_API_KEY configuration.')
-    );
+    // Don't fail the entire page if AI advice fails
+    advicePromise = null;
   }
 
   const today = new Date().toLocaleDateString('en-US', {
@@ -165,7 +168,23 @@ export default async function ReportPage({ params, searchParams }: ReportPagePro
         </div>
 
         {/* ── AI Coach Feedback ──────────────────────────────────────────────── */}
-        <AICoachSection advicePromise={advicePromise} />
+        {advicePromise ? (
+          <AICoachSection advicePromise={advicePromise} />
+        ) : (
+          <Card className="border-amber-200 bg-amber-50/60 dark:border-amber-800 dark:bg-amber-950/20">
+            <CardContent className="flex flex-col items-center gap-4 py-10 text-center">
+              <div className="rounded-full bg-amber-100 p-3 dark:bg-amber-900/30">
+                <AlertTriangle className="h-6 w-6 text-amber-600 dark:text-amber-400" />
+              </div>
+              <div>
+                <h3 className="font-semibold">AI Advice Temporarily Unavailable</h3>
+                <p className="mt-1 max-w-md text-sm text-muted-foreground">
+                  Our AI coach is currently unavailable. Please check back later or contact support if this issue persists.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* ── Actions ────────────────────────────────────────────────────────── */}
         <div className="flex flex-col items-center gap-3 border-t pt-8 sm:flex-row sm:justify-center">

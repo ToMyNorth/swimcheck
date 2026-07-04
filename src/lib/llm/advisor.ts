@@ -55,7 +55,9 @@ export async function generateAdvice(scores: StrokeScores): Promise<SwimmingAdvi
 
   try {
     const completion = await openai.chat.completions.create({
-      model: 'openai/gpt-4o-mini', // OpenRouter 格式：provider/model
+      // Use free model to avoid payment requirement
+      // Options: mistralai/mistral-7b-instruct:free, google/gemma-2-9b-it:free, meta-llama/llama-3.1-8b-instruct:free
+      model: 'meta-llama/llama-3.1-8b-instruct:free', // Free model, no credit card required
       messages: [
         { role: 'system', content: 'You are a professional swimming coach with ASCA Level 3 certification.' },
         { role: 'user', content: prompt },
