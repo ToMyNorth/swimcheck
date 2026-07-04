@@ -78,10 +78,13 @@ export async function detectPose(imageElement: HTMLImageElement): Promise<Keypoi
     pose.onResults((results: any) => {
       if (!results.poseLandmarks) {
         reject(new Error(
-          'No swimmer detected. Please try:\n' +
-          '• Use a clearer image with better lighting\n' +
-          '• Ensure the person is visible in the frame\n' +
-          '• Side view works best for analysis'
+          'Unable to detect body pose. The most common reason is that the full body is not visible in the frame.\n\n' +
+          'Please ensure:\n' +
+          '• The swimmer\'s FULL BODY (head to toes) is visible in the image/video\n' +
+          '• Shot from the SIDE (profile view) for best results\n' +
+          '• Taken ABOVE water — underwater or partially submerged shots may fail\n' +
+          '• Good lighting with minimal water splash obstruction\n\n' +
+          'Tip: Photos where only the head or upper body is above water cannot be analyzed.'
         ));
         return;
       }

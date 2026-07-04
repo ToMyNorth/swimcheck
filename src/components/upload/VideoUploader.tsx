@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
-import { Upload, X, Video as VideoIcon, AlertCircle, Play } from 'lucide-react';
+import { Upload, X, Video as VideoIcon, AlertCircle, Play, CheckCircle, XCircle, Camera } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 
@@ -127,6 +127,40 @@ export default function VideoUploader({ onVideoSelected }: VideoUploaderProps) {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Shooting Guidelines */}
+        <div className="rounded-xl border border-border bg-muted/30 p-4 space-y-3">
+          <div className="flex items-center gap-2 text-sm font-medium">
+            <Camera className="h-4 w-4 text-primary" />
+            <span>For Best Results</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <div className="flex items-start gap-2">
+              <CheckCircle className="h-3.5 w-3.5 text-green-500 mt-0.5 shrink-0" />
+              <span>Full body visible in the frame</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <CheckCircle className="h-3.5 w-3.5 text-green-500 mt-0.5 shrink-0" />
+              <span>Side view works best</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <CheckCircle className="h-3.5 w-3.5 text-green-500 mt-0.5 shrink-0" />
+              <span>Above-water shots recommended</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <CheckCircle className="h-3.5 w-3.5 text-green-500 mt-0.5 shrink-0" />
+              <span>Steady camera, good lighting</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <XCircle className="h-3.5 w-3.5 text-red-500 mt-0.5 shrink-0" />
+              <span>Avoid head/upper-body only shots</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <XCircle className="h-3.5 w-3.5 text-red-500 mt-0.5 shrink-0" />
+              <span>Avoid heavy splash or occlusion</span>
+            </div>
+          </div>
+        </div>
+
         {/* Drop Zone */}
         {!video && (
           <div

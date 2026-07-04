@@ -226,8 +226,8 @@ export default function VideoAnalyzePage() {
           <VideoUploader onVideoSelected={handleVideoSelected} />
 
           {error && (
-            <div className="mx-auto flex max-w-2xl items-center gap-2 rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive">
-              <AlertTriangle className="h-4 w-4 shrink-0" />
+            <div className="mx-auto flex max-w-2xl items-start gap-2 rounded-lg bg-destructive/10 px-4 py-3 text-sm text-destructive whitespace-pre-line">
+              <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
               {error}
             </div>
           )}
