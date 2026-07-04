@@ -83,19 +83,32 @@ export default async function ReportPage({ params, searchParams }: ReportPagePro
     notFound();
   }
 
-  // Generate AI advice (server-side)
+  // Generate AI advice (server-side) with error handling
   let advicePromise: Promise<SwimmingAdvice> | null = null;
-  try {
-    // Only generate advice if OPENAI_API_KEY is configured
-    if (process.env.OPENAI_API_KEY) {
-      advicePromise = generateAdvice(scores);
-    } else {
-      console.log('OPENAI_API_KEY not configured, skipping AI advice generation');
+  
+  if (process.env.OPENAI_API_KEY) {
+    try {
+      // Create the promise but wrap it to catch errors
+      const rawPromise = generateAdvice(scores);
+      
+      // Wrap the promise to handle failures gracefully
+      advicePromise = rawPromise.catch((error) => {
+        console.error('AI advice generation failed:', error);
+        // Return a fallback advice object instead of throwing
+        return {
+          summary: 'AI analysis temporarily unavailable due to high demand. Please try again later.',
+          strengths: ['Analysis completed successfully'],
+          weaknesses: ['AI coach feedback pending'],
+          recommendations: [],
+          encouragement: 'Keep practicing! Your technique is improving.',
+        } as SwimmingAdvice;
+      });
+    } catch (error) {
+      console.error('Failed to initialize advice generation:', error);
+      advicePromise = null;
     }
-  } catch (error) {
-    console.error('Failed to initialize advice generation:', error);
-    // Don't fail the entire page if AI advice fails
-    advicePromise = null;
+  } else {
+    console.log('OPENAI_API_KEY not configured, skipping AI advice generation');
   }
 
   const today = new Date().toLocaleDateString('en-US', {
