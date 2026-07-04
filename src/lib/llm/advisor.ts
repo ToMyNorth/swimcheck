@@ -55,10 +55,10 @@ export async function generateAdvice(scores: StrokeScores): Promise<SwimmingAdvi
 
   try {
     const completion = await openai.chat.completions.create({
-      // Mistral Large - High-quality paid model, works in China via OpenRouter
-      // Cost: ~$2.00/1M tokens (input), $6.00/1M tokens (output)
-      // Excellent for structured JSON output and professional analysis
-      model: 'mistralai/mistral-large',
+      // Mistral Nemo - Very cheap European model, works in China via OpenRouter
+      // Cost: ~$0.02/1M tokens (input), $0.03/1M tokens (output)
+      // Good for structured JSON output and swimming analysis
+      model: 'mistralai/mistral-nemo',
       messages: [
         { role: 'system', content: 'You are a professional swimming coach with ASCA Level 3 certification.' },
         { role: 'user', content: prompt },
@@ -111,8 +111,8 @@ export async function generateVideoAdvice(
     .replace('{overall}', averageScores.overall.toString());
 
   const completion = await openai.chat.completions.create({
-    // Mistral Large for video analysis (same as image for consistency)
-    model: 'mistralai/mistral-large',
+    // Mistral Nemo for video analysis (same as image for consistency)
+    model: 'mistralai/mistral-nemo',
     messages: [
       { role: 'system', content: 'You are a professional swimming coach with ASCA Level 3 certification.' },
       { role: 'user', content: prompt },
