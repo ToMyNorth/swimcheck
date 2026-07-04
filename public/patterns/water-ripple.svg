@@ -1,0 +1,29 @@
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="water-ripple" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+      <!-- 水波纹线条 -->
+      <path d="M0 25 Q12.5 20 25 25 T50 25" 
+            stroke="currentColor" 
+            stroke-width="1" 
+            fill="none" 
+            opacity="0.3"/>
+      <path d="M0 35 Q12.5 30 25 35 T50 35" 
+            stroke="currentColor" 
+            stroke-width="1" 
+            fill="none" 
+            opacity="0.2"/>
+      <path d="M0 15 Q12.5 10 25 15 T50 15" 
+            stroke="currentColor" 
+            stroke-width="1" 
+            fill="none" 
+            opacity="0.2"/>
+      
+      <!-- 小圆点模拟气泡 -->
+      <circle cx="10" cy="10" r="1.5" fill="currentColor" opacity="0.15"/>
+      <circle cx="35" cy="40" r="1" fill="currentColor" opacity="0.1"/>
+      <circle cx="45" cy="15" r="1.2" fill="currentColor" opacity="0.12"/>
+    </pattern>
+  </defs>
+  
+  <rect width="100%" height="100%" fill="url(#water-ripple)"/>
+</svg>
