@@ -26,6 +26,11 @@ export async function POST(request: Request) {
       throw new Error('Lemon Squeezy is not configured. Please set environment variables.');
     }
 
+    // Setup Lemon Squeezy SDK - this must be called before any API calls
+    lemonSqueezySetup({
+      apiKey: apiKey,
+    });
+
     // Use SDK to create checkout
     const checkout = await createCheckout(storeId, variantId, {
       productOptions: {
