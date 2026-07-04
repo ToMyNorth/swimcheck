@@ -48,33 +48,33 @@ export async function POST(request: NextRequest) {
     const advice = await Promise.race([advicePromise, timeoutPromise]).catch(
       (err) => {
         console.warn('[/api/advice] Falling back due to:', err.message);
-        // 返回fallback建议，字段与 SwimmingAdvice 类型匹配
+        // Return fallback advice matching SwimmingAdvice type
         return {
           summary:
-            '由于网络超时，暂时无法获取个性化建议。请检查网络连接后重试。',
-          strengths: ['已完成基础分析'],
+            'Unable to generate personalized advice at this time. Please check your connection and try again.',
+          strengths: ['Basic analysis completed'],
           weaknesses: [],
           recommendations: [
             {
-              issue: '保持训练节奏',
-              metric: '整体表现',
+              issue: 'Maintain training consistency',
+              metric: 'Overall performance',
               currentScore: 70,
               targetScore: 80,
-              explanation: '持续规律训练有助于提升技术稳定性',
-              drill: '基础练习',
-              howTo: '重复基础动作训练，关注动作规范',
+              explanation: 'Regular practice helps improve technique stability',
+              drill: 'Fundamental drills',
+              howTo: 'Repeat basic stroke movements with focus on proper form',
             },
             {
-              issue: '定期录制视频对比',
-              metric: '动作一致性',
+              issue: 'Record videos for comparison',
+              metric: 'Stroke consistency',
               currentScore: 65,
               targetScore: 75,
-              explanation: '视频对比能帮助发现动作偏差',
-              drill: '视频对比训练',
-              howTo: '每周录制一次游泳视频，与标准动作对比',
+              explanation: 'Video comparison helps identify form deviations',
+              drill: 'Video review training',
+              howTo: 'Record swimming videos weekly and compare with standard technique',
             },
           ],
-          encouragement: '坚持训练，你的技术正在稳步提升！',
+          encouragement: 'Keep practicing! Your technique is steadily improving.',
         } as SwimmingAdvice;
       }
     );
