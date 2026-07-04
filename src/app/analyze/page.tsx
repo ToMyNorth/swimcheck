@@ -9,6 +9,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import ImageUploader, { UploadedImage } from '@/components/upload/ImageUploader';
 import SkeletonOverlay from '@/components/visualization/SkeletonOverlay';
 import { ScoreCard } from '@/components/ui/ScoreCard';
+import { PaywallModal } from '@/components/paywall/PaywallModal';
 import { Keypoint, detectPose, filterKeypoints } from '@/lib/mediapipe/poseDetector';
 import { calculateStrokeScores, StrokeScores } from '@/lib/analysis/scorer';
 
@@ -22,6 +23,7 @@ export default function AnalyzePage() {
   const [scoresList, setScoresList] = useState<StrokeScores[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
+  const [showPaywall, setShowPaywall] = useState(false);
   const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
 
   const handleImagesSelected = useCallback((images: UploadedImage[]) => {
@@ -31,6 +33,21 @@ export default function AnalyzePage() {
 
   const startAnalysis = async () => {
     if (uploadedImages.length === 0) return;
+
+    // Check quota before analysis
+    try {
+      const quotaRes = await fetch('/api/analysis/quota');
+      if (quotaRes.ok) {
+        const quota = await quotaRes.json();
+        if (!quota.isPro && quota.used >= quota.limit) {
+          setShowPaywall(true);
+          return;
+        }
+      }
+    } catch (err) {
+      console.error('Quota check failed:', err);
+      // Proceed anyway if quota check fails
+    }
 
     setState('processing');
     setError(null);
@@ -73,6 +90,22 @@ export default function AnalyzePage() {
       setKeypointsList(allKeypoints);
       setScoresList(allScores);
       setState('results');
+
+      // Save analysis to backend (silent failure)
+      try {
+        await fetch('/api/analysis/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'image',
+            imageUrl: uploadedImages[0]?.preview || null,
+            scores: allScores.length === 1 ? allScores[0] : allScores,
+            advice: null,
+          }),
+        });
+      } catch (err) {
+        console.error('Failed to save analysis:', err);
+      }
     } catch (err) {
       console.error('Pose detection error:', err);
       setError(err instanceof Error ? err.message : 'Analysis failed. Please try again.');
@@ -106,6 +139,7 @@ export default function AnalyzePage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+      <PaywallModal open={showPaywall} onOpenChange={setShowPaywall} />
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">Analyze Your Stroke</h1>

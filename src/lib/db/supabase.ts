@@ -11,31 +11,38 @@ export { supabase };
 export interface AnalysisRecord {
   id: string;
   user_id: string;
-  image_url: string;
+  video_url: string | null;
   scores: Record<string, number>;
   advice: Record<string, unknown> | null;
   created_at: string;
 }
 
-export async function saveAnalysis(
-  userId: string,
-  imageUrl: string,
-  scores: Record<string, number>,
-  advice: Record<string, unknown> | null
-): Promise<string> {
+export interface SaveAnalysisInput {
+  userId: string;
+  type?: 'image' | 'video';
+  imageUrl?: string | null;
+  videoUrl?: string | null;
+  scores: Record<string, number>;
+  advice?: Record<string, unknown> | null;
+}
+
+export async function saveAnalysis(input: SaveAnalysisInput): Promise<AnalysisRecord> {
+  // The analyses table only has video_url column; store whichever URL is provided there
+  const url = input.videoUrl || input.imageUrl || null;
+
   const { data, error } = await supabase
     .from('analyses')
     .insert({
-      user_id: userId,
-      image_url: imageUrl,
-      scores,
-      advice,
+      user_id: input.userId,
+      video_url: url,
+      scores: input.scores,
+      advice: input.advice || null,
     })
-    .select('id')
+    .select()
     .single();
 
   if (error) throw error;
-  return data.id;
+  return data as AnalysisRecord;
 }
 
 export async function getUserAnalyses(userId: string): Promise<AnalysisRecord[]> {

@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import VideoUploader, { UploadedVideo } from '@/components/upload/VideoUploader';
 import { ScoreCard } from '@/components/ui/ScoreCard';
+import { PaywallModal } from '@/components/paywall/PaywallModal';
 import { Keypoint, detectPose, filterKeypoints } from '@/lib/mediapipe/poseDetector';
 import { calculateStrokeScores, StrokeScores } from '@/lib/analysis/scorer';
 import {
@@ -51,6 +52,7 @@ export default function VideoAnalyzePage() {
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [progressText, setProgressText] = useState('');
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const handleVideoSelected = useCallback((video: UploadedVideo) => {
     setUploadedVideo(video);
@@ -59,6 +61,21 @@ export default function VideoAnalyzePage() {
 
   const startAnalysis = async () => {
     if (!uploadedVideo) return;
+
+    // Check quota before analysis
+    try {
+      const quotaRes = await fetch('/api/analysis/quota');
+      if (quotaRes.ok) {
+        const quota = await quotaRes.json();
+        if (!quota.isPro && quota.used >= quota.limit) {
+          setShowPaywall(true);
+          return;
+        }
+      }
+    } catch (err) {
+      console.error('Quota check failed:', err);
+      // Proceed anyway if quota check fails
+    }
 
     setError(null);
     setProgress(0);
@@ -142,6 +159,22 @@ export default function VideoAnalyzePage() {
       setResults(frameResults);
       setAverageScores(avgScores);
       setState('results');
+
+      // Save analysis to backend (silent failure)
+      try {
+        await fetch('/api/analysis/save', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'video',
+            videoUrl: uploadedVideo ? URL.createObjectURL(uploadedVideo.file) : null,
+            scores: avgScores,
+            advice: null,
+          }),
+        });
+      } catch (err) {
+        console.error('Failed to save video analysis:', err);
+      }
     } catch (err) {
       console.error('Video analysis error:', err);
       setError(err instanceof Error ? err.message : 'Analysis failed. Please try again.');
@@ -179,6 +212,7 @@ export default function VideoAnalyzePage() {
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+      <PaywallModal open={showPaywall} onOpenChange={setShowPaywall} />
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">Video Stroke Analysis</h1>
