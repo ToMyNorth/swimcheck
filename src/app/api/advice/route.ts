@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
       
       if (existingAnalysis?.advice) {
         console.log('[/api/advice] Returning cached advice from DB');
-        return NextResponse.json(existingAnalysis.advice as SwimmingAdvice);
+        return NextResponse.json(existingAnalysis.advice as unknown as SwimmingAdvice);
       }
       console.log('[/api/advice] No cached advice found, generating new...');
     }
