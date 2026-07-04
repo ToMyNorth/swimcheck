@@ -69,7 +69,7 @@ export async function getUserQuota(userId: string): Promise<{
   // Check if user has active subscription
   const { data: subscription } = await supabase
     .from('subscriptions')
-    .select('status, plan')
+    .select('status')
     .eq('user_id', userId)
     .eq('status', 'active')
     .maybeSingle();
