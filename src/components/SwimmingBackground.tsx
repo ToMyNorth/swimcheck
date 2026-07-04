@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 
 interface SwimmingBackgroundProps {
   /**
@@ -125,11 +126,13 @@ export function SwimmingBackground({
   return (
     <div className="absolute inset-0 overflow-hidden">
       {/* 静态图片层 */}
-      <img
+      <Image
         src={fallbackImageUrl}
         alt="Swimming background"
-        className="absolute inset-0 h-full w-full object-cover"
+        fill
+        className="object-cover"
         loading="lazy"
+        sizes="100vw"
       />
       
       {/* 渐变遮罩层 */}

@@ -1,5 +1,6 @@
 import { auth } from '@/app/api/auth/[...nextauth]/route';
 import { redirect } from 'next/navigation';
+import type { Metadata } from 'next';
 import { getUserAnalyses, getUserQuota } from '@/lib/db/supabase';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +8,14 @@ import { Progress } from '@/components/ui/progress';
 import Link from 'next/link';
 import { BarChart3, LogOut, CreditCard } from 'lucide-react';
 import { signOut } from 'next-auth/react';
+
+export const metadata: Metadata = {
+  title: 'Dashboard | StrokeLab',
+  robots: {
+    index: false,
+    follow: false,
+  },
+};
 
 export default async function DashboardPage() {
   const session = await auth();

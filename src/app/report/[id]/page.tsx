@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { ArrowLeft, Calendar } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -60,6 +61,31 @@ function OverallScoreRing({ score }: { score: number }) {
       </div>
     </div>
   );
+}
+
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ scores?: string }> }): Promise<Metadata> {
+  const params = await searchParams;
+  let title = 'Swimming Stroke Analysis Report | StrokeLab';
+  let description = 'View your AI-powered swimming stroke analysis report with detailed scores and improvement tips.';
+
+  if (params.scores) {
+    try {
+      const scores = JSON.parse(decodeURIComponent(params.scores));
+      const overallScore = scores.overallScore || scores.overall_score || scores.totalScore || scores.overall;
+      if (typeof overallScore === 'number') {
+        title = `Swimming Analysis Score: ${overallScore}/100 | StrokeLab`;
+        description = `Your swimming stroke analysis scored ${overallScore}/100. View detailed breakdown and AI coaching tips to improve your technique.`;
+      }
+    } catch {
+      // Use defaults
+    }
+  }
+
+  return {
+    title,
+    description,
+    robots: { index: false, follow: false },
+  };
 }
 
 export default async function ReportPage({ params, searchParams }: ReportPageProps) {

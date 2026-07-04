@@ -10,21 +10,46 @@ const fontVariables = "font-sans";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://strokelab.app'),
-  title: 'StrokeLab - AI Swimming Stroke Analysis',
-  description: 'Upload your swimming photos and get instant AI-powered feedback on your technique. Improve your form with personalized coaching.',
+  title: {
+    default: 'StrokeLab - AI Swimming Stroke Analysis',
+    template: '%s | StrokeLab',
+  },
+  description:
+    'StrokeLab is an AI-powered swimming stroke analysis platform. Upload a photo or video of your swim and receive instant, professional-grade technique feedback from our advanced computer vision and AI coaching engine.',
+  keywords: [
+    'swimming',
+    'swim analysis',
+    'swim technique',
+    'swimming stroke analysis',
+    'AI swimming coach',
+    'AI coach',
+    'swim technique analysis',
+    'swimming posture correction',
+    'swim form',
+    'swimming coach',
+    'freestyle analysis',
+    'breaststroke analysis',
+    'butterfly analysis',
+    'backstroke analysis',
+  ],
+  authors: [{ name: 'StrokeLab Team' }],
+  creator: 'StrokeLab',
+  publisher: 'StrokeLab',
+  category: 'Sports Technology',
   openGraph: {
     title: 'StrokeLab - AI Swimming Stroke Analysis',
-    description: 'AI-powered swimming stroke analysis for better technique.',
-    images: ['/images/examples/freestyle-side.jpg'],
+    description:
+      'Upload your swimming photos or videos and get instant AI-powered feedback on your technique. Improve your form with personalized coaching from StrokeLab.',
     url: '/',
     siteName: 'StrokeLab',
+    locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'StrokeLab - AI Swimming Stroke Analysis',
-    description: 'AI-powered swimming stroke analysis for better technique.',
-    images: ['/images/examples/freestyle-side.jpg'],
+    description:
+      'Upload your swimming photos or videos and get instant AI-powered feedback on your technique. Improve your form with personalized coaching from StrokeLab.',
   },
   robots: {
     index: true,

@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import Image from 'next/image';
+import type { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { 
@@ -84,6 +86,14 @@ const sectionIcons = {
   accuracy: Activity,
   precision: Target,
   achievement: Award,
+};
+
+export const metadata: Metadata = {
+  title: 'StrokeLab - AI Swimming Stroke Analysis | Free Instant Feedback',
+  description: 'Upload your swimming photos or videos and get instant AI-powered feedback on your stroke technique. Improve freestyle, breaststroke, butterfly and backstroke with personalized coaching tips.',
+  alternates: {
+    canonical: '/',
+  },
 };
 
 export default function Home() {
@@ -222,9 +232,11 @@ export default function Home() {
             {samples.map((sample) => (
               <Card key={sample.title} className="overflow-hidden border-border/60 shadow-sm hover:shadow-xl transition-all hover:-translate-y-1 group">
                 <div className="relative overflow-hidden">
-                  <img
+                  <Image
                     src={sample.image}
                     alt={sample.title + ' example'}
+                    width={400}
+                    height={192}
                     className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
                   />
@@ -354,6 +366,39 @@ export default function Home() {
               },
             ],
           }),
+        }}
+      />
+
+      {/* JSON-LD Structured Data: Organization + WebSite */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify([
+            {
+              '@context': 'https://schema.org',
+              '@type': 'Organization',
+              name: 'StrokeLab',
+              url: 'https://strokelab.app',
+              logo: 'https://strokelab.app/favicon.ico',
+              description: 'AI-powered swimming stroke analysis platform providing instant feedback on swim technique for freestyle, breaststroke, butterfly, and backstroke.',
+              sameAs: [
+                'https://twitter.com/strokelab_app',
+                'https://www.youtube.com/@strokelab',
+              ],
+              contactPoint: {
+                '@type': 'ContactPoint',
+                contactType: 'customer support',
+                url: 'https://strokelab.app/faq',
+              },
+            },
+            {
+              '@context': 'https://schema.org',
+              '@type': 'WebSite',
+              name: 'StrokeLab',
+              url: 'https://strokelab.app',
+              description: 'AI-powered swimming stroke analysis for better technique',
+            },
+          ]),
         }}
       />
 

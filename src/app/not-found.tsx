@@ -1,6 +1,14 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 import { Button } from '@/components/ui/button';
-import { Waves, Home, ArrowLeft } from 'lucide-react';
+import { Waves, Home, ArrowLeft, Video } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'Page Not Found',
+  description:
+    'The page you are looking for does not exist. Return to StrokeLab homepage or try our swimming stroke analysis tools.',
+  robots: { index: false, follow: false },
+};
 
 export default function NotFound() {
   return (
@@ -27,6 +35,12 @@ export default function NotFound() {
             <Button variant="outline" size="lg" className="gap-2">
               <ArrowLeft className="h-4 w-4" />
               Analyze Stroke
+            </Button>
+          </Link>
+          <Link href="/analyze/video">
+            <Button variant="outline" size="lg" className="gap-2">
+              <Video className="h-4 w-4" />
+              Video Analysis
             </Button>
           </Link>
         </div>

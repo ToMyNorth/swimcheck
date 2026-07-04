@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import { ArrowLeft, Calendar, Video } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -82,6 +83,31 @@ function formatTime(seconds: number): string {
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
   return `${m}:${s.toString().padStart(2, '0')}`;
+}
+
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ data?: string }> }): Promise<Metadata> {
+  const params = await searchParams;
+  let title = 'Video Stroke Analysis Report | StrokeLab';
+  let description = 'View your comprehensive AI-powered video swimming stroke analysis with frame-by-frame feedback.';
+
+  if (params.data) {
+    try {
+      const data = JSON.parse(decodeURIComponent(params.data));
+      const overallScore = data.overallScore || data.overall_score || data.totalScore || data.scores?.overall;
+      if (typeof overallScore === 'number') {
+        title = `Video Analysis Score: ${overallScore}/100 | StrokeLab`;
+        description = `Your video swimming analysis scored ${overallScore}/100. Watch the annotated playback and get AI coaching tips.`;
+      }
+    } catch {
+      // Use defaults
+    }
+  }
+
+  return {
+    title,
+    description,
+    robots: { index: false, follow: false },
+  };
 }
 
 export default async function VideoReportPage({ params, searchParams }: VideoReportPageProps) {
