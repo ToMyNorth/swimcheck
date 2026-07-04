@@ -24,6 +24,7 @@ export default function AnalyzePage() {
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
   const [showPaywall, setShowPaywall] = useState(false);
+  const [savedRecordId, setSavedRecordId] = useState<string | null>(null);
   const imageRefs = useRef<(HTMLImageElement | null)[]>([]);
 
   const handleImagesSelected = useCallback((images: UploadedImage[]) => {
@@ -93,7 +94,7 @@ export default function AnalyzePage() {
 
       // Save analysis to backend (silent failure)
       try {
-        await fetch('/api/analysis/save', {
+        const saveRes = await fetch('/api/analysis/save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -103,6 +104,12 @@ export default function AnalyzePage() {
             advice: null,
           }),
         });
+        
+        if (saveRes.ok) {
+          const saveData = await saveRes.json();
+          setSavedRecordId(saveData.record?.id || null);
+          console.log('Analysis saved with ID:', saveData.record?.id);
+        }
       } catch (err) {
         console.error('Failed to save analysis:', err);
       }
@@ -293,7 +300,8 @@ export default function AnalyzePage() {
               onClick={() => {
                 if (!averageScores) return;
                 const scoresJson = encodeURIComponent(JSON.stringify(averageScores));
-                router.push(`/report/temp-id?scores=${scoresJson}`);
+                const recordId = savedRecordId || 'temp-id';
+                router.push(`/report/${recordId}?scores=${scoresJson}`);
               }}
               className="gap-2"
             >
