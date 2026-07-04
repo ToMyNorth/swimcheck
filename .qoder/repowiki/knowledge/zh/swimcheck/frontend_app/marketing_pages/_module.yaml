@@ -1,0 +1,10 @@
+schema_version: 1
+module_path: frontend_app/marketing_pages
+title: marketing_pages
+scope:
+    - src/app/faq/
+    - src/app/privacy/
+    - src/app/terms/
+source_files: []
+depends_on: []
+related_to: []

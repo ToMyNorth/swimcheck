@@ -1,0 +1,8 @@
+schema_version: 1
+module_path: frontend_app/api_routes
+title: api_routes
+scope:
+    - src/app/api/
+source_files: []
+depends_on: []
+related_to: []

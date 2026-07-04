@@ -1,0 +1,16 @@
+schema_version: 1
+module_path: frontend_app/app_shell_and_actions
+title: app_shell_and_actions
+scope:
+    - src/app/actions/
+    - src/app/layout.tsx
+    - src/app/page.tsx
+    - src/app/error.tsx
+    - src/app/loading.tsx
+    - src/app/not-found.tsx
+    - src/app/globals.css
+    - src/app/manifest.ts
+    - src/instrumentation.ts
+source_files: []
+depends_on: []
+related_to: []

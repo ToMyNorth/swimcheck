@@ -4,7 +4,6 @@ import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScoreCard } from '@/components/ui/ScoreCard';
 import { AICoachSection } from '@/components/report/AICoachSection';
-import { generateVideoAdvice, type SwimmingAdvice, type VideoFrameScore } from '@/lib/llm/advisor';
 import type { StrokeScores } from '@/lib/analysis/scorer';
 
 interface VideoReportPageProps {
@@ -106,31 +105,6 @@ export default async function VideoReportPage({ params, searchParams }: VideoRep
 
   const scores = reportData.scores;
   const frameResults = reportData.frameResults;
-
-  // Build frame scores for LLM
-  const frameScores: VideoFrameScore[] = frameResults.map((f) => ({
-    frameIndex: f.frameIndex,
-    timestamp: f.timestamp,
-    scores: {
-      bodyAlignment: f.bodyAlignment,
-      armEntryLeft: f.armEntryLeft,
-      armEntryRight: f.armEntryRight,
-      headPosition: f.headPosition,
-      bodyRoll: f.bodyRoll,
-      symmetry: f.symmetry,
-      overall: f.overall,
-    },
-  }));
-
-  // Generate AI advice
-  let advicePromise: Promise<SwimmingAdvice>;
-  try {
-    advicePromise = generateVideoAdvice(frameScores, scores);
-  } catch {
-    advicePromise = Promise.reject(
-      new Error('OpenAI API key not configured. Please add OPENAI_API_KEY to your .env.local file.')
-    );
-  }
 
   const today = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
@@ -263,7 +237,7 @@ export default async function VideoReportPage({ params, searchParams }: VideoRep
         </div>
 
         {/* AI Coach */}
-        <AICoachSection advicePromise={advicePromise} />
+        <AICoachSection scores={scores} />
 
         {/* Actions */}
         <div className="flex flex-col items-center gap-3 border-t pt-8 sm:flex-row sm:justify-center">

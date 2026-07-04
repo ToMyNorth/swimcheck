@@ -1,0 +1,9 @@
+schema_version: 1
+module_path: frontend_app
+title: frontend_app
+scope:
+    - src/app/
+    - src/instrumentation.ts
+source_files: []
+depends_on: []
+related_to: []

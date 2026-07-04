@@ -1,13 +1,14 @@
 'use client';
 
-import React, { use, useState } from 'react';
+import React, { useState } from 'react';
 import { CheckCircle2, AlertTriangle, Target, Lightbulb, ChevronDown, ChevronUp } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import type { SwimmingAdvice } from '@/lib/llm/advisor';
+import type { StrokeScores } from '@/lib/analysis/scorer';
 
 interface AICoachSectionProps {
-  advicePromise: Promise<SwimmingAdvice>;
+  scores: StrokeScores;
 }
 
 function scoreColor(score: number): string {
@@ -175,33 +176,46 @@ function AdviceContent({ advice }: { advice: SwimmingAdvice }) {
   );
 }
 
-export function AICoachSection({ advicePromise }: AICoachSectionProps) {
+export function AICoachSection({ scores }: AICoachSectionProps) {
   const [advice, setAdvice] = useState<SwimmingAdvice | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Use useEffect to handle the promise asynchronously
   React.useEffect(() => {
     let mounted = true;
-    
-    advicePromise
-      .then((result) => {
+
+    async function fetchAdvice() {
+      try {
+        const response = await fetch('/api/advice', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ scores }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
         if (mounted) {
-          setAdvice(result);
+          setAdvice(data);
           setLoading(false);
         }
-      })
-      .catch((err) => {
+      } catch (err) {
         if (mounted) {
           setError(err instanceof Error ? err.message : 'Failed to generate advice');
           setLoading(false);
         }
-      });
+      }
+    }
+
+    fetchAdvice();
 
     return () => {
       mounted = false;
     };
-  }, [advicePromise]);
+  }, [scores]);
 
   if (loading) {
     return (

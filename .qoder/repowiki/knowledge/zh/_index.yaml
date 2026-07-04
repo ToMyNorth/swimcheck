@@ -1,0 +1,106 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: zh-CN
+branch: main
+nodes_managed: true
+exported_at: "2026-07-04T16:03:27Z"
+modules:
+    "":
+        dir_name: swimcheck
+        title: swimcheck
+        scope: []
+        source_files: []
+        children:
+            - core_lib
+            - frontend_app
+            - scripts
+            - shared_components
+        depends_on: []
+        related_to: []
+    core_lib:
+        dir_name: core_lib
+        title: core_lib
+        scope:
+            - src/lib/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    frontend_app:
+        dir_name: frontend_app
+        title: frontend_app
+        scope:
+            - src/app/
+            - src/instrumentation.ts
+        source_files: []
+        children:
+            - frontend_app/analyze_feature
+            - frontend_app/api_routes
+            - frontend_app/app_shell_and_actions
+            - frontend_app/marketing_pages
+        depends_on: []
+        related_to: []
+    frontend_app/analyze_feature:
+        dir_name: analyze_feature
+        title: analyze_feature
+        scope:
+            - src/app/analyze/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    frontend_app/api_routes:
+        dir_name: api_routes
+        title: api_routes
+        scope:
+            - src/app/api/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    frontend_app/app_shell_and_actions:
+        dir_name: app_shell_and_actions
+        title: app_shell_and_actions
+        scope:
+            - src/app/actions/
+            - src/app/layout.tsx
+            - src/app/page.tsx
+            - src/app/error.tsx
+            - src/app/loading.tsx
+            - src/app/not-found.tsx
+            - src/app/globals.css
+            - src/app/manifest.ts
+            - src/instrumentation.ts
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    frontend_app/marketing_pages:
+        dir_name: marketing_pages
+        title: marketing_pages
+        scope:
+            - src/app/faq/
+            - src/app/privacy/
+            - src/app/terms/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    scripts:
+        dir_name: scripts
+        title: scripts
+        scope:
+            - scripts/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    shared_components:
+        dir_name: shared_components
+        title: shared_components
+        scope:
+            - src/components/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
