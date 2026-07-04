@@ -166,8 +166,7 @@ export default function VideoAnalyzePage() {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            type: 'video',
-            videoUrl: uploadedVideo ? URL.createObjectURL(uploadedVideo.file) : null,
+            imageUrl: null,
             scores: avgScores,
             advice: null,
           }),

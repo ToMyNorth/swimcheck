@@ -16,8 +16,8 @@ export async function GET() {
       }, { status: 500 });
     }
 
-    // Create Supabase client with service role key
-    const supabase = createClient(supabaseUrl, serviceRoleKey);
+    // Create Supabase client with service role key (next_auth schema)
+    const supabase = createClient(supabaseUrl, serviceRoleKey, { db: { schema: 'next_auth' } });
 
     // Test 1: Check connection
     const { data: users, error: userError } = await supabase
@@ -32,13 +32,14 @@ export async function GET() {
       }, { status: 500 });
     }
 
-    // Test 2: Try to insert a test analysis record
+    // Test 2: Try to insert a test analysis record (analyses is in public schema)
     const testUserId = 'test-user-' + Date.now();
     const { data: insertData, error: insertError } = await supabase
+      .schema('public')
       .from('analyses')
       .insert({
         user_id: testUserId,
-        video_url: 'https://example.com/test.jpg',
+        image_url: 'https://example.com/test.jpg',
         scores: { bodyAlignment: 80, armEntryLeft: 90, armEntryRight: 85, headPosition: 75, bodyRoll: 70, symmetry: 95, overall: 83 },
         advice: { summary: 'Test advice', strengths: ['Good form'], weaknesses: ['Needs work'], recommendations: [], encouragement: 'Keep going!' },
       })
@@ -54,8 +55,8 @@ export async function GET() {
       }, { status: 500 });
     }
 
-    // Test 3: Clean up - delete the test record
-    await supabase.from('analyses').delete().eq('user_id', testUserId);
+    // Test 3: Clean up - delete the test record (public schema)
+    await supabase.schema('public').from('analyses').delete().eq('user_id', testUserId);
 
     return NextResponse.json({
       success: true,

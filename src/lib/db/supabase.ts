@@ -1,9 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Service role client for server-side operations
+// Default schema is next_auth (for accounts, sessions, users, subscriptions)
+// analyses table is in public schema — use .schema('public') per-query
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
+  process.env.SUPABASE_SERVICE_ROLE_KEY!,
+  { db: { schema: 'next_auth' } }
 );
 
 export { supabase };
@@ -11,30 +14,31 @@ export { supabase };
 export interface AnalysisRecord {
   id: string;
   user_id: string;
-  video_url: string | null;
+  image_url: string | null;
   scores: Record<string, number>;
   advice: Record<string, unknown> | null;
   created_at: string;
+  updated_at: string;
 }
 
 export interface SaveAnalysisInput {
   userId: string;
-  type?: 'image' | 'video';
+  type?: 'image';
   imageUrl?: string | null;
-  videoUrl?: string | null;
   scores: Record<string, number>;
   advice?: Record<string, unknown> | null;
 }
 
 export async function saveAnalysis(input: SaveAnalysisInput): Promise<AnalysisRecord> {
-  // The analyses table only has video_url column; store whichever URL is provided there
-  const url = input.videoUrl || input.imageUrl || null;
+  // analyses table is in public schema with image_url column
+  const url = input.imageUrl || null;
 
   const { data, error } = await supabase
+    .schema('public')
     .from('analyses')
     .insert({
       user_id: input.userId,
-      video_url: url,
+      image_url: url,
       scores: input.scores,
       advice: input.advice || null,
     })
@@ -47,6 +51,7 @@ export async function saveAnalysis(input: SaveAnalysisInput): Promise<AnalysisRe
 
 export async function getUserAnalyses(userId: string): Promise<AnalysisRecord[]> {
   const { data, error } = await supabase
+    .schema('public')
     .from('analyses')
     .select('*')
     .eq('user_id', userId)
@@ -78,6 +83,7 @@ export async function getUserQuota(userId: string): Promise<{
   startOfMonth.setHours(0, 0, 0, 0);
 
   const { count } = await supabase
+    .schema('public')
     .from('analyses')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId)

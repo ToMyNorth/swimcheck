@@ -16,13 +16,12 @@ export async function POST(req: NextRequest) {
     }
 
     const body = await req.json();
-    const { type, imageUrl, videoUrl, scores, advice } = body;
+    const { imageUrl, scores, advice } = body;
 
     const record = await saveAnalysis({
       userId: session.user.id,
-      type: type || 'image',
+      type: 'image',
       imageUrl: imageUrl || null,
-      videoUrl: videoUrl || null,
       scores,
       advice,
     });
