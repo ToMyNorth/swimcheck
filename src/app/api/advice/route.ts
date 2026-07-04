@@ -26,9 +26,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 带8秒超时的AI建议生成
+    // 带30秒超时的AI建议生成
     const timeoutPromise = new Promise<never>((_, reject) =>
-      setTimeout(() => reject(new Error('Timeout')), 8000)
+      setTimeout(() => reject(new Error('Timeout')), 30000)
     );
 
     const advicePromise = generateAdvice(scores as StrokeScores);
