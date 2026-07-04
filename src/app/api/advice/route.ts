@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateAdvice, type SwimmingAdvice } from '@/lib/llm/advisor';
 import type { StrokeScores } from '@/lib/analysis/scorer';
 import { auth } from '@/app/api/auth/[...nextauth]/route';
-import { saveAnalysis, getAnalysisById } from '@/lib/db/supabase';
+import { saveAnalysis, getAnalysisById, supabase } from '@/lib/db/supabase';
 
 export async function POST(request: NextRequest) {
   try {
@@ -83,14 +83,27 @@ export async function POST(request: NextRequest) {
 
     // 保存分析结果到数据库（scores + advice）
     try {
-      const record = await saveAnalysis({
-        userId: session.user.id,
-        type: 'image',
-        imageUrl: imageUrl || null,
-        scores: scores as Record<string, number>,
-        advice: advice as unknown as Record<string, unknown>,
-      });
-      console.log('[/api/advice] Analysis saved to DB, id:', record.id);
+      if (analysisId) {
+        // 如果已有 analysisId，只更新 advice（不创建新记录）
+        const { error: updateError } = await supabase
+          .schema('public')
+          .from('analyses')
+          .update({ advice: advice as unknown as Record<string, unknown> })
+          .eq('id', analysisId);
+        
+        if (updateError) throw updateError;
+        console.log('[/api/advice] Advice updated for existing record:', analysisId);
+      } else {
+        // 如果没有 analysisId，创建新记录
+        const record = await saveAnalysis({
+          userId: session.user.id,
+          type: 'image',
+          imageUrl: imageUrl || null,
+          scores: scores as Record<string, number>,
+          advice: advice as unknown as Record<string, unknown>,
+        });
+        console.log('[/api/advice] New analysis saved to DB, id:', record.id);
+      }
     } catch (dbError) {
       // 数据库保存失败不影响建议返回，仅记录日志
       console.error('[/api/advice] Failed to save analysis to DB:', dbError);
