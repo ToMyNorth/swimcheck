@@ -13,7 +13,7 @@ const DEFAULT_OPTIONS: DrawingOptions = {
   keypointRadius: 4,
   lineColor: '#00ccff',
   lineWidth: 2,
-  visibilityThreshold: 0.5,
+  visibilityThreshold: 0.3, // Relaxed threshold to show more keypoints
 };
 
 export function drawSkeleton(
