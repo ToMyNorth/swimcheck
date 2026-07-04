@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Calendar } from 'lucide-react';
+import { ArrowLeft, Calendar, AlertTriangle } from 'lucide-react';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { ScoreCard } from '@/components/ui/ScoreCard';
