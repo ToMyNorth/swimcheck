@@ -55,8 +55,8 @@ export async function generateAdvice(scores: StrokeScores): Promise<SwimmingAdvi
 
   try {
     const completion = await openai.chat.completions.create({
-      // Google Gemma 4 31B - highest quality free model on OpenRouter (262K context)
-      model: 'google/gemma-4-31b-it:free',
+      // NVIDIA Nemotron 3 Super 120B - high quality free model (1M context, less rate-limited than Gemma)
+      model: 'nvidia/nemotron-3-super-120b-a12b:free',
       messages: [
         { role: 'system', content: 'You are a professional swimming coach with ASCA Level 3 certification.' },
         { role: 'user', content: prompt },
