@@ -74,6 +74,8 @@ export async function generateAdvice(scores: StrokeScores): Promise<SwimmingAdvi
     let content = completion.choices[0].message.content;
     if (!content) throw new Error('No advice generated');
 
+    console.log('Raw content from LLM:', content.substring(0, 200));
+
     // Handle markdown code blocks (some models wrap JSON in ```json ... ```)
     content = content.trim();
     if (content.startsWith('```')) {
@@ -94,9 +96,15 @@ export async function generateAdvice(scores: StrokeScores): Promise<SwimmingAdvi
       }
     }
 
+    console.log('Processed content for parsing:', content.substring(0, 200));
+
     return JSON.parse(content) as SwimmingAdvice;
   } catch (error) {
     console.error('OpenRouter API call failed:', error);
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
     
     // Return fallback advice instead of throwing
     return {
