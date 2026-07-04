@@ -55,9 +55,10 @@ export async function generateAdvice(scores: StrokeScores): Promise<SwimmingAdvi
 
   try {
     const completion = await openai.chat.completions.create({
-      // Meta Llama 3.1 8B - Free model, stable and supports JSON output
-      // Cost: FREE (no credit required)
-      model: 'meta-llama/llama-3.1-8b-instruct:free',
+      // Meta Llama 3.3 70B - Paid model, works in China via OpenRouter
+      // Cost: ~$0.90/1M tokens (input/output)
+      // Good balance of quality and price for swimming analysis
+      model: 'meta-llama/llama-3.3-70b-instruct',
       messages: [
         { role: 'system', content: 'You are a professional swimming coach with ASCA Level 3 certification.' },
         { role: 'user', content: prompt },
@@ -110,8 +111,8 @@ export async function generateVideoAdvice(
     .replace('{overall}', averageScores.overall.toString());
 
   const completion = await openai.chat.completions.create({
-    // Meta Llama 3.1 8B for video analysis (same as image for consistency)
-    model: 'meta-llama/llama-3.1-8b-instruct:free',
+    // Meta Llama 3.3 70B for video analysis (same as image for consistency)
+    model: 'meta-llama/llama-3.3-70b-instruct',
     messages: [
       { role: 'system', content: 'You are a professional swimming coach with ASCA Level 3 certification.' },
       { role: 'user', content: prompt },
