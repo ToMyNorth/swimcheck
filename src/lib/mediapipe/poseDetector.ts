@@ -59,9 +59,9 @@ async function getPoseInstance(): Promise<any> {
       modelComplexity: 1,
       smoothLandmarks: true,
       enableSegmentation: false,
-      // Relaxed detection thresholds for better user experience
-      minDetectionConfidence: 0.3,  // Lowered from 0.5 to detect partial poses
-      minTrackingConfidence: 0.3,   // Lowered from 0.5 for smoother tracking
+      // Very relaxed detection thresholds for maximum compatibility
+      minDetectionConfidence: 0.1,  // Extremely low to detect any human figure
+      minTrackingConfidence: 0.1,   // Extremely low for lenient tracking
     });
 
     await poseInstance.initialize();
@@ -78,10 +78,9 @@ export async function detectPose(imageElement: HTMLImageElement): Promise<Keypoi
     pose.onResults((results: any) => {
       if (!results.poseLandmarks) {
         reject(new Error(
-          'Unable to detect swimmer in the image. Please ensure:\n' +
-          '• The person is clearly visible in the frame\n' +
-          '• Good lighting conditions (avoid dark or backlit scenes)\n' +
-          '• Minimal water splash obstruction\n' +
+          'No swimmer detected. Please try:\n' +
+          '• Use a clearer image with better lighting\n' +
+          '• Ensure the person is visible in the frame\n' +
           '• Side view works best for analysis'
         ));
         return;
@@ -103,7 +102,7 @@ export async function detectPose(imageElement: HTMLImageElement): Promise<Keypoi
   });
 }
 
-export function filterKeypoints(keypoints: Keypoint[], threshold = 0.3): Keypoint[] {
+export function filterKeypoints(keypoints: Keypoint[], threshold = 0.1): Keypoint[] {
   return keypoints.map((kp) => ({
     ...kp,
     visibility: kp.visibility < threshold ? 0 : kp.visibility,

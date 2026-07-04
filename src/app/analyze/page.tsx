@@ -75,7 +75,7 @@ export default function AnalyzePage() {
 
         // Run pose detection
         const keypoints = await detectPose(imageElement);
-        const filtered = filterKeypoints(keypoints, 0.3); // Relaxed threshold for better detection
+        const filtered = filterKeypoints(keypoints, 0.1); // Very relaxed threshold for maximum compatibility
         allKeypoints.push(filtered);
 
         // Calculate stroke scores for this image
