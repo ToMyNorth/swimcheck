@@ -70,7 +70,7 @@ export function calculateAngle(
   b: Keypoint,
   c: Keypoint
 ): number | null {
-  if (a.visibility < 0.5 || b.visibility < 0.5 || c.visibility < 0.5) return null;
+  if (a.visibility < 0.15 || b.visibility < 0.15 || c.visibility < 0.15) return null;
 
   const ba = { x: a.x - b.x, y: a.y - b.y };
   const bc = { x: c.x - b.x, y: c.y - b.y };

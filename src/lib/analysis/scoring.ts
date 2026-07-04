@@ -31,7 +31,7 @@ export function scoreBodyAlignment(keypoints: Keypoint[]): number {
   const rightHip = keypoints[24];
 
   // If any required landmark is not visible, return neutral score
-  if ([leftShoulder, rightShoulder, leftHip, rightHip].some(kp => kp.visibility < 0.3)) {
+  if ([leftShoulder, rightShoulder, leftHip, rightHip].some(kp => kp.visibility < 0.15)) {
     return 50;
   }
 
@@ -59,7 +59,7 @@ export function scoreArmEntry(keypoints: Keypoint[], side: 'left' | 'right'): nu
   const elbow = side === 'left' ? keypoints[13] : keypoints[14];
   const wrist = side === 'left' ? keypoints[15] : keypoints[16];
 
-  if ([shoulder, elbow, wrist].some(kp => kp.visibility < 0.3)) {
+  if ([shoulder, elbow, wrist].some(kp => kp.visibility < 0.15)) {
     return 50; // cannot assess → neutral
   }
 
@@ -102,7 +102,7 @@ export function scoreHeadPosition(keypoints: Keypoint[]): number {
   const rightHip = keypoints[24];
 
   const required = [nose, leftEar, rightEar, leftShoulder, rightShoulder, leftHip, rightHip];
-  if (required.some(kp => kp.visibility < 0.3)) {
+  if (required.some(kp => kp.visibility < 0.15)) {
     return 50;
   }
 
@@ -174,7 +174,7 @@ export function scoreBodyRoll(keypoints: Keypoint[]): number {
   const leftHip = keypoints[23];
   const rightHip = keypoints[24];
 
-  if ([leftShoulder, rightShoulder, leftHip, rightHip].some(kp => kp.visibility < 0.3)) {
+  if ([leftShoulder, rightShoulder, leftHip, rightHip].some(kp => kp.visibility < 0.15)) {
     return 50;
   }
 
@@ -206,7 +206,7 @@ export function scoreSymmetry(keypoints: Keypoint[]): number {
   const rightWrist = keypoints[16];
 
   // Need both arms visible for a meaningful comparison
-  if ([leftElbow, rightElbow, leftWrist, rightWrist].some(kp => kp.visibility < 0.5)) {
+  if ([leftElbow, rightElbow, leftWrist, rightWrist].some(kp => kp.visibility < 0.15)) {
     return 50;
   }
 

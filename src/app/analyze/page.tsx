@@ -10,7 +10,7 @@ import ImageUploader, { UploadedImage } from '@/components/upload/ImageUploader'
 import SkeletonOverlay from '@/components/visualization/SkeletonOverlay';
 import { ScoreCard } from '@/components/ui/ScoreCard';
 import { PaywallModal } from '@/components/paywall/PaywallModal';
-import { Keypoint, detectPose, filterKeypoints } from '@/lib/mediapipe/poseDetector';
+import { Keypoint, detectPoseOrNull, filterKeypoints } from '@/lib/mediapipe/poseDetector';
 import { calculateStrokeScores, StrokeScores } from '@/lib/analysis/scorer';
 
 type AnalysisState = 'upload' | 'processing' | 'results';
@@ -56,6 +56,7 @@ export default function AnalyzePage() {
 
     const allKeypoints: Keypoint[][] = [];
     const allScores: StrokeScores[] = [];
+    const failedImages: string[] = [];
 
     try {
       for (let i = 0; i < uploadedImages.length; i++) {
@@ -73,9 +74,18 @@ export default function AnalyzePage() {
 
         imageRefs.current[i] = imageElement;
 
-        // Run pose detection
-        const keypoints = await detectPose(imageElement);
-        const filtered = filterKeypoints(keypoints, 0.1); // Very relaxed threshold for maximum compatibility
+        // Run pose detection with fallback (returns null instead of throwing)
+        const keypoints = await detectPoseOrNull(imageElement);
+
+        if (!keypoints) {
+          // Skip this image — pose detection failed even with fallback
+          failedImages.push(img.file.name);
+          console.warn(`Image ${i + 1} (${img.file.name}): no pose detected, skipping`);
+          setProgress(Math.round(((i + 1) / uploadedImages.length) * 100));
+          continue;
+        }
+
+        const filtered = filterKeypoints(keypoints, 0.1);
         allKeypoints.push(filtered);
 
         // Calculate stroke scores for this image
@@ -86,6 +96,24 @@ export default function AnalyzePage() {
         console.log('Scores:', scores);
 
         setProgress(Math.round(((i + 1) / uploadedImages.length) * 100));
+      }
+
+      // Only fail if EVERY image failed detection
+      if (allKeypoints.length === 0) {
+        throw new Error(
+          'Unable to detect body pose in the uploaded image(s). The most common reason is that the full body is not visible in the frame.\n\n' +
+          'Please ensure:\n' +
+          '• The swimmer\'s FULL BODY (head to toes) is visible in the image/video\n' +
+          '• Shot from the SIDE (profile view) for best results\n' +
+          '• Taken ABOVE water — underwater or partially submerged shots may fail\n' +
+          '• Good lighting with minimal water splash obstruction\n\n' +
+          'Tip: Photos where only the head or upper body is above water cannot be analyzed.'
+        );
+      }
+
+      // Show warning if some images were skipped
+      if (failedImages.length > 0) {
+        console.warn(`${failedImages.length} image(s) skipped:`, failedImages.join(', '));
       }
 
       setKeypointsList(allKeypoints);

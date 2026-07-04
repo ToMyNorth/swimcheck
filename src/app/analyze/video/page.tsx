@@ -19,7 +19,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import VideoUploader, { UploadedVideo } from '@/components/upload/VideoUploader';
 import { ScoreCard } from '@/components/ui/ScoreCard';
 import { PaywallModal } from '@/components/paywall/PaywallModal';
-import { Keypoint, detectPose, filterKeypoints } from '@/lib/mediapipe/poseDetector';
+import { Keypoint, detectPoseOrNull, filterKeypoints } from '@/lib/mediapipe/poseDetector';
 import { calculateStrokeScores, StrokeScores } from '@/lib/analysis/scorer';
 import {
   extractFrames,
@@ -53,6 +53,7 @@ export default function VideoAnalyzePage() {
   const [progress, setProgress] = useState(0);
   const [progressText, setProgressText] = useState('');
   const [showPaywall, setShowPaywall] = useState(false);
+  const [skippedFrames, setSkippedFrames] = useState(0);
 
   const handleVideoSelected = useCallback((video: UploadedVideo) => {
     setUploadedVideo(video);
@@ -79,6 +80,7 @@ export default function VideoAnalyzePage() {
 
     setError(null);
     setProgress(0);
+    setSkippedFrames(0);
 
     try {
       // Phase 1: Extract frames
@@ -100,14 +102,26 @@ export default function VideoAnalyzePage() {
       setProgressText('Analyzing pose in each frame...');
 
       const frameResults: FrameAnalysisResult[] = [];
+      let failedFrames = 0;
 
       for (let i = 0; i < frames.length; i++) {
         const frame = frames[i];
         const imgElement = await frameToImageElement(frame);
 
-        // Run pose detection
-        const keypoints = await detectPose(imgElement);
-        const filtered = filterKeypoints(keypoints, 0.5);
+        // Run pose detection with fallback (returns null instead of throwing)
+        const keypoints = await detectPoseOrNull(imgElement);
+
+        if (!keypoints) {
+          // Skip frames where no pose could be detected — continue with the rest
+          failedFrames++;
+          setSkippedFrames(failedFrames);
+          console.warn(`Frame ${i + 1}/${frames.length} (t=${frame.timestamp.toFixed(1)}s): no pose detected, skipping`);
+          setProgress(Math.round(((i + 1) / frames.length) * 100));
+          setProgressText(`Analyzing pose... (${i + 1}/${frames.length} frames, ${failedFrames} skipped)`);
+          continue;
+        }
+
+        const filtered = filterKeypoints(keypoints, 0.1);
 
         // Calculate scores
         const scores = calculateStrokeScores(filtered);
@@ -132,7 +146,19 @@ export default function VideoAnalyzePage() {
         });
 
         setProgress(Math.round(((i + 1) / frames.length) * 100));
-        setProgressText(`Analyzing pose... (${i + 1}/${frames.length} frames)`);
+        setProgressText(`Analyzing pose... (${i + 1}/${frames.length} frames${failedFrames > 0 ? `, ${failedFrames} skipped` : ''})`);
+      }
+
+      // Only fail if EVERY frame failed detection
+      if (frameResults.length === 0) {
+        throw new Error(
+          'Unable to detect body pose in any video frame. The most common reason is that the full body is not visible.\n\n' +
+          'Please ensure:\n' +
+          '• The swimmer\'s FULL BODY (head to toes) is visible\n' +
+          '• Shot from the SIDE (profile view) for best results\n' +
+          '• Taken ABOVE water — underwater or partially submerged shots may fail\n' +
+          '• Good lighting with minimal water splash obstruction'
+        );
       }
 
       // Phase 3: Generate summary
@@ -189,6 +215,7 @@ export default function VideoAnalyzePage() {
     setError(null);
     setProgress(0);
     setProgressText('');
+    setSkippedFrames(0);
   };
 
   // Find best and worst frames
@@ -283,6 +310,16 @@ export default function VideoAnalyzePage() {
             <CheckCircle2 className="h-4 w-4" />
             Analysis complete — {results.length} frames analyzed from video
           </div>
+
+          {/* Partial detection warning */}
+          {skippedFrames > 0 && (
+            <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-amber-700 dark:border-amber-800 dark:bg-amber-950/30 dark:text-amber-300">
+              <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+              <span>
+                {skippedFrames} frame(s) were skipped due to pose detection failure. Analysis is based on the {results.length} successfully analyzed frame(s). This may affect accuracy.
+              </span>
+            </div>
+          )}
 
           {/* Overall Score */}
           <div className="space-y-4">

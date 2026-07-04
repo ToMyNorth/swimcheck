@@ -71,21 +71,50 @@ async function getPoseInstance(): Promise<any> {
   return loadingPromise;
 }
 
-export async function detectPose(imageElement: HTMLImageElement): Promise<Keypoint[]> {
-  const pose = await getPoseInstance();
+/**
+ * Preprocess an image element via canvas: resize to optimal resolution and
+ * enhance contrast to help MediaPipe detect poses in challenging swimming scenes
+ * (water reflection, splash, low light).
+ */
+function preprocessImage(
+  source: HTMLImageElement | HTMLCanvasElement,
+  enhance: boolean = true
+): HTMLCanvasElement {
+  // MediaPipe works best with ~256px on the longer side
+  const maxDim = 320;
+  const w = source instanceof HTMLImageElement ? source.naturalWidth : source.width;
+  const h = source instanceof HTMLImageElement ? source.naturalHeight : source.height;
+  const scale = Math.min(1, maxDim / Math.max(w, h));
+  const outW = Math.round(w * scale);
+  const outH = Math.round(h * scale);
 
-  return new Promise<Keypoint[]>((resolve, reject) => {
+  const canvas = document.createElement('canvas');
+  canvas.width = outW;
+  canvas.height = outH;
+  const ctx = canvas.getContext('2d')!;
+
+  if (enhance) {
+    // Draw with contrast / brightness adjustment
+    ctx.filter = 'contrast(1.3) brightness(1.1) saturate(1.2)';
+  }
+  ctx.drawImage(source, 0, 0, outW, outH);
+  ctx.filter = 'none';
+
+  return canvas;
+}
+
+/**
+ * Core single-attempt detection — returns null instead of throwing when no
+ * landmarks are found, so callers can implement fallback strategies.
+ */
+async function detectPoseOnce(
+  pose: any,
+  imageSource: HTMLImageElement | HTMLCanvasElement
+): Promise<Keypoint[] | null> {
+  return new Promise<Keypoint[] | null>((resolve) => {
     pose.onResults((results: any) => {
       if (!results.poseLandmarks) {
-        reject(new Error(
-          'Unable to detect body pose. The most common reason is that the full body is not visible in the frame.\n\n' +
-          'Please ensure:\n' +
-          '• The swimmer\'s FULL BODY (head to toes) is visible in the image/video\n' +
-          '• Shot from the SIDE (profile view) for best results\n' +
-          '• Taken ABOVE water — underwater or partially submerged shots may fail\n' +
-          '• Good lighting with minimal water splash obstruction\n\n' +
-          'Tip: Photos where only the head or upper body is above water cannot be analyzed.'
-        ));
+        resolve(null);
         return;
       }
       const keypoints: Keypoint[] = results.poseLandmarks.map(
@@ -99,10 +128,56 @@ export async function detectPose(imageElement: HTMLImageElement): Promise<Keypoi
       resolve(keypoints);
     });
 
-    pose.send({ image: imageElement }).catch((err: Error) => {
-      reject(err);
+    pose.send({ image: imageSource }).catch(() => {
+      resolve(null);
     });
   });
+}
+
+/**
+ * Detect pose with multi-stage fallback:
+ *   1. Original image at current complexity
+ *   2. Contrast-enhanced + resized canvas
+ *   Returns null if all attempts fail (caller decides how to handle).
+ */
+export async function detectPoseOrNull(
+  imageElement: HTMLImageElement | HTMLCanvasElement
+): Promise<Keypoint[] | null> {
+  const pose = await getPoseInstance();
+
+  // Attempt 1: original image
+  let keypoints = await detectPoseOnce(pose, imageElement);
+  if (keypoints) return keypoints;
+
+  // Attempt 2: preprocessed (contrast-enhanced + resized)
+  try {
+    const enhanced = preprocessImage(imageElement, true);
+    keypoints = await detectPoseOnce(pose, enhanced);
+    if (keypoints) return keypoints;
+  } catch {
+    // preprocessing failed — continue
+  }
+
+  return null;
+}
+
+/**
+ * Original detectPose — now with built-in fallback + improved error message.
+ * Throws if all fallback attempts fail.
+ */
+export async function detectPose(imageElement: HTMLImageElement): Promise<Keypoint[]> {
+  const keypoints = await detectPoseOrNull(imageElement);
+  if (keypoints) return keypoints;
+
+  throw new Error(
+    'Unable to detect body pose. The most common reason is that the full body is not visible in the frame.\n\n' +
+    'Please ensure:\n' +
+    '• The swimmer\'s FULL BODY (head to toes) is visible in the image/video\n' +
+    '• Shot from the SIDE (profile view) for best results\n' +
+    '• Taken ABOVE water — underwater or partially submerged shots may fail\n' +
+    '• Good lighting with minimal water splash obstruction\n\n' +
+    'Tip: Photos where only the head or upper body is above water cannot be analyzed.'
+  );
 }
 
 export function filterKeypoints(keypoints: Keypoint[], threshold = 0.1): Keypoint[] {
