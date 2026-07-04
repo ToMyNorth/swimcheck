@@ -11,6 +11,20 @@ import SkeletonOverlay from '@/components/visualization/SkeletonOverlay';
 import { ScoreCard } from '@/components/ui/ScoreCard';
 import { Keypoint, detectPose, filterKeypoints } from '@/lib/mediapipe/poseDetector';
 import { calculateStrokeScores, StrokeScores } from '@/lib/analysis/scorer';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'AI Swimming Analysis - Upload Your Photo | StrokeLab',
+  description: 'Upload your swimming photo and get instant AI-powered stroke analysis. Improve your technique with personalized feedback in seconds.',
+  openGraph: {
+    title: 'Analyze Your Swimming Stroke with AI',
+    description: 'Free AI swimming analysis tool - upload photos for instant feedback',
+    url: '/analyze',
+    siteName: 'StrokeLab',
+    type: 'website',
+  },
+  alternates: { canonical: '/analyze' },
+};
 
 type AnalysisState = 'upload' | 'processing' | 'results';
 

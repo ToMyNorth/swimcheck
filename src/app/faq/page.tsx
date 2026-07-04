@@ -9,7 +9,14 @@ import {
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: 'FAQ - Frequently Asked Questions | StrokeLab',
-    description: 'Find answers to common questions about our AI swimming analysis tool.',
+    description: 'Find answers to common questions about our AI swimming analysis tool. Learn how to use StrokeLab for better swimming technique.',
+    openGraph: {
+      title: 'StrokeLab FAQ',
+      description: 'Common questions about AI-powered swimming stroke analysis',
+      url: '/faq',
+      siteName: 'StrokeLab',
+      type: 'website',
+    },
     alternates: { canonical: '/faq' },
   };
 }
@@ -85,6 +92,25 @@ export default function FAQPage() {
           </p>
         </div>
       </div>
+
+      {/* JSON-LD Structured Data: FAQPage */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: faqs.map((faq) => ({
+              '@type': 'Question',
+              name: faq.question,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: faq.answer,
+              },
+            })),
+          }),
+        }}
+      />
     </div>
   );
 }

@@ -4,6 +4,13 @@ import { signIn } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Waves } from 'lucide-react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Sign In - StrokeLab AI Swimming Analysis',
+  description: 'Sign in to StrokeLab to track your swimming progress and unlock advanced AI-powered stroke analysis features.',
+  robots: { index: false },
+};
 
 export default function SignInPage() {
   return (
