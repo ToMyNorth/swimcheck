@@ -152,7 +152,7 @@ export default async function ReportPage({ params, searchParams }: ReportPagePro
         </div>
 
         {/* ── AI Coach Feedback ──────────────────────────────────────────────── */}
-        <AICoachSection scores={scores} />
+        <AICoachSection scores={scores} analysisId={id} />
 
         {/* ── Actions ────────────────────────────────────────────────────────── */}
         <div className="flex flex-col items-center gap-3 border-t pt-8 sm:flex-row sm:justify-center">

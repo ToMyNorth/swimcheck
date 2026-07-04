@@ -9,6 +9,7 @@ import type { StrokeScores } from '@/lib/analysis/scorer';
 
 interface AICoachSectionProps {
   scores: StrokeScores;
+  analysisId?: string;
 }
 
 function scoreColor(score: number): string {
@@ -176,7 +177,7 @@ function AdviceContent({ advice }: { advice: SwimmingAdvice }) {
   );
 }
 
-export function AICoachSection({ scores }: AICoachSectionProps) {
+export function AICoachSection({ scores, analysisId }: AICoachSectionProps) {
   const [advice, setAdvice] = useState<SwimmingAdvice | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -189,7 +190,7 @@ export function AICoachSection({ scores }: AICoachSectionProps) {
         const response = await fetch('/api/advice', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ scores }),
+          body: JSON.stringify({ scores, analysisId }),
         });
 
         if (!response.ok) {

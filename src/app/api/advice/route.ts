@@ -2,12 +2,24 @@ import { NextRequest, NextResponse } from 'next/server';
 import { generateAdvice, type SwimmingAdvice } from '@/lib/llm/advisor';
 import type { StrokeScores } from '@/lib/analysis/scorer';
 import { auth } from '@/app/api/auth/[...nextauth]/route';
-import { saveAnalysis } from '@/lib/db/supabase';
+import { saveAnalysis, getAnalysisById } from '@/lib/db/supabase';
 
 export async function POST(request: NextRequest) {
   try {
-    const { scores, imageUrl } = await request.json();
-    console.log('[/api/advice] Received scores:', JSON.stringify(scores));
+    const { scores, imageUrl, analysisId } = await request.json();
+    console.log('[/api/advice] Received request:', { analysisId, hasScores: !!scores });
+
+    // 如果有 analysisId，先检查数据库中是否已有 advice
+    if (analysisId) {
+      console.log('[/api/advice] Checking existing advice for ID:', analysisId);
+      const existingAnalysis = await getAnalysisById(analysisId);
+      
+      if (existingAnalysis?.advice) {
+        console.log('[/api/advice] Returning cached advice from DB');
+        return NextResponse.json(existingAnalysis.advice as SwimmingAdvice);
+      }
+      console.log('[/api/advice] No cached advice found, generating new...');
+    }
 
     // 验证scores参数
     if (!scores || typeof scores !== 'object') {

@@ -61,6 +61,18 @@ export async function getUserAnalyses(userId: string): Promise<AnalysisRecord[]>
   return data || [];
 }
 
+export async function getAnalysisById(analysisId: string): Promise<AnalysisRecord | null> {
+  const { data, error } = await supabase
+    .schema('public')
+    .from('analyses')
+    .select('*')
+    .eq('id', analysisId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data as AnalysisRecord | null;
+}
+
 export async function getUserQuota(userId: string): Promise<{
   used: number;
   limit: number;
