@@ -1,3 +1,72 @@
+# 🏊 StrokeLab — AI-Powered Swimming Stroke Analysis
+
+**Upload a swimming video and get instant AI analysis of stroke technique, timing, and improvement tips.**
+
+👉 **[strokelab.app](https://strokelab.app)**
+
+![StrokeLab](https://strokelab.app/og-default.png)
+
+## ✨ Features
+
+- **AI Stroke Analysis** — Upload a video and receive detailed stroke-by-stroke feedback powered by AI
+- **Pose Detection** — MediaPipe-based body pose tracking for precise movement analysis
+- **Video Upload** — Support for common video formats, processed securely in the cloud
+- **Detailed Reports** — Stroke timing, body position, kick pattern, and improvement suggestions
+- **Dashboard** — Track your analysis history and progress over time
+- **Google Login** — Sign in with Google to save and revisit your analyses
+- **Pricing Plans** — Free tier with optional paid plans for advanced features
+- **FAQ & Support** — Comprehensive help documentation
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Styling**: Tailwind CSS v4 + shadcn/ui
+- **AI**: OpenAI (via OpenRouter), MediaPipe Pose
+- **Database**: Supabase (PostgreSQL)
+- **Auth**: NextAuth.js (Google OAuth)
+- **Payments**: Stripe, Lemon Squeezy
+- **Language**: TypeScript
+- **Deployment**: Vercel
+
+## 🚀 Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/ToMyNorth/swimcheck.git
+
+# Install dependencies
+cd swimcheck
+npm install
+
+# Set up environment variables
+cp .env.local.example .env.local
+# Edit .env.local with your Supabase, OpenRouter, and auth credentials
+
+# Run development server
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 📄 Pages
+
+| Page | URL | Description |
+|------|-----|-------------|
+| Home | `/` | Landing page with feature showcase |
+| Analyze | `/analyze` | Upload video for AI analysis |
+| Analyze Video | `/analyze/video` | Video analysis interface |
+| Dashboard | `/dashboard` | Analysis history |
+| Report | `/report` | Detailed stroke report |
+| Pricing | `/pricing` | Plans and pricing |
+| FAQ | `/faq` | Frequently asked questions |
+
+## 🌐 Live
+
+**[strokelab.app](https://strokelab.app)** — Upload your first video for free.
+
+## 📝 License
+
+MIT
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
