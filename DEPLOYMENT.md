@@ -91,7 +91,8 @@ Vercel 会自动检测代码变更并重新部署。
 ## ✅ 验证部署
 
 ### 1. 检查环境变量
-访问 `https://your-domain.vercel.app/api/debug-env`，确认所有环境变量已正确加载。
+在 Vercel Dashboard -> Project Settings -> Environment Variables 中确认必需变量已配置。
+不要在生产环境暴露调试接口或返回任何 secret、service role key、OAuth secret。
 
 ### 2. 测试 Google OAuth 登录
 1. 访问 `https://your-domain.vercel.app/auth/signin`
