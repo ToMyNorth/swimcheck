@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { track } from '@vercel/analytics/react';
 import { Loader2, ArrowLeft, CheckCircle2, AlertTriangle, Info, FileText, Video } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -43,6 +44,7 @@ export default function AnalyzePage() {
       if (quotaRes.ok) {
         const quota = await quotaRes.json();
         if (!quota.isPro && quota.used >= quota.limit) {
+          track('analysis_quota_blocked', { analysis_type: 'photo' });
           setShowPaywall(true);
           return;
         }
@@ -52,6 +54,10 @@ export default function AnalyzePage() {
       // Proceed anyway if quota check fails
     }
 
+    track('analysis_started', {
+      analysis_type: 'photo',
+      media_count: uploadedImages.length,
+    });
     setState('processing');
     setError(null);
     setProgress(0);
@@ -135,6 +141,12 @@ export default function AnalyzePage() {
       setScoresList(allScores);
       setSuccessfulImageIndices(localIndices);
       setState('results');
+      track('analysis_completed', {
+        analysis_type: 'photo',
+        media_count: uploadedImages.length,
+        successful_count: localIndices.length,
+        skipped_count: failedImages.length,
+      });
 
       // Save analysis to backend (silent failure)
       try {
@@ -166,6 +178,10 @@ export default function AnalyzePage() {
       }
     } catch (err) {
       console.error('Pose detection error:', err);
+      track('analysis_failed', {
+        analysis_type: 'photo',
+        failure_stage: 'pose_detection',
+      });
       setError(err instanceof Error ? err.message : 'Analysis failed. Please try again.');
       setState('upload');
     }

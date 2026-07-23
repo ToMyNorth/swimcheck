@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { track } from '@vercel/analytics/react';
 import {
   Loader2,
   ArrowLeft,
@@ -71,6 +72,7 @@ export default function VideoAnalyzePage() {
       if (quotaRes.ok) {
         const quota = await quotaRes.json();
         if (!quota.isPro && quota.used >= quota.limit) {
+          track('analysis_quota_blocked', { analysis_type: 'video' });
           setShowPaywall(true);
           return;
         }
@@ -80,9 +82,12 @@ export default function VideoAnalyzePage() {
       // Proceed anyway if quota check fails
     }
 
+    track('analysis_started', { analysis_type: 'video', media_count: 1 });
     setError(null);
     setProgress(0);
     setSkippedFrames(0);
+
+    let failureStage = 'frame_extraction';
 
     try {
       // Phase 1: Extract frames
@@ -99,6 +104,7 @@ export default function VideoAnalyzePage() {
       }
 
       // Phase 2: Analyze each frame
+      failureStage = 'pose_detection';
       setState('analyzing');
       setProgress(0);
       setProgressText('Analyzing pose in each frame...');
@@ -164,6 +170,7 @@ export default function VideoAnalyzePage() {
       }
 
       // Phase 3: Generate summary
+      failureStage = 'summary';
       setState('generating');
       setProgressText('Generating summary...');
       setProgress(100);
@@ -187,6 +194,12 @@ export default function VideoAnalyzePage() {
       setResults(frameResults);
       setAverageScores(avgScores);
       setState('results');
+      track('analysis_completed', {
+        analysis_type: 'video',
+        media_count: 1,
+        successful_count: frameResults.length,
+        skipped_count: failedFrames,
+      });
 
       // Save analysis to backend with full frame data (silent failure)
       try {
@@ -224,6 +237,10 @@ export default function VideoAnalyzePage() {
       }
     } catch (err) {
       console.error('Video analysis error:', err);
+      track('analysis_failed', {
+        analysis_type: 'video',
+        failure_stage: failureStage,
+      });
       setError(err instanceof Error ? err.message : 'Analysis failed. Please try again.');
       setState('upload');
     }

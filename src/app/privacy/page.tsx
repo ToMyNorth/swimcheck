@@ -11,13 +11,13 @@ export default function PrivacyPage() {
     <div className="py-16 sm:py-24 bg-background">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-bold tracking-tight text-foreground">Privacy Policy</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Last updated: June 29, 2026</p>
+        <p className="mt-2 text-sm text-muted-foreground">Last updated: July 23, 2026</p>
 
         <div className="mt-10 prose prose-sm max-w-none text-muted-foreground space-y-8">
           <section>
             <h2 className="text-xl font-semibold text-foreground">1. Introduction</h2>
             <p className="mt-3 leading-relaxed">
-              StrokeLab ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services. Please read this policy carefully. By using StrokeLab, you consent to the data practices described herein.
+              StrokeLab (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services. Please read this policy carefully. By using StrokeLab, you consent to the data practices described herein.
             </p>
           </section>
 
@@ -42,7 +42,17 @@ export default function PrivacyPage() {
               <li>Device information (browser type, operating system, device identifiers)</li>
               <li>Log data (IP address, access times, pages viewed, referring URL)</li>
               <li>Cookies and similar tracking technologies</li>
+              <li>
+                Aggregate analysis events, including photo or video mode,
+                whether an analysis started, completed, failed, or reached the
+                usage limit, and non-sensitive media counts
+              </li>
             </ul>
+            <p className="mt-2 leading-relaxed">
+              Analytics events do not include uploaded media, file names, image
+              or video URLs, analysis scores, account details, or raw error
+              messages.
+            </p>
 
             <h3 className="mt-4 text-lg font-medium text-foreground">2.3 Uploaded Content</h3>
             <p className="mt-2 leading-relaxed">
@@ -105,12 +115,12 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground">8. Your Rights (GDPR & CCPA)</h2>
+            <h2 className="text-xl font-semibold text-foreground">8. Your Rights (GDPR &amp; CCPA)</h2>
             <p className="mt-3 leading-relaxed">Depending on your location, you may have the following rights:</p>
             <ul className="mt-2 list-disc pl-6 space-y-1">
               <li><strong>Right of Access:</strong> Request a copy of the personal data we hold about you</li>
               <li><strong>Right to Rectification:</strong> Request correction of inaccurate data</li>
-              <li><strong>Right to Erasure:</strong> Request deletion of your personal data ("right to be forgotten")</li>
+              <li><strong>Right to Erasure:</strong> Request deletion of your personal data (&quot;right to be forgotten&quot;)</li>
               <li><strong>Right to Restrict Processing:</strong> Request that we limit how we use your data</li>
               <li><strong>Right to Data Portability:</strong> Request transfer of your data to another service</li>
               <li><strong>Right to Object:</strong> Object to processing based on legitimate interests</li>
@@ -140,7 +150,7 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="text-xl font-semibold text-foreground">11. Children's Privacy</h2>
+            <h2 className="text-xl font-semibold text-foreground">11. Children&apos;s Privacy</h2>
             <p className="mt-3 leading-relaxed">
               StrokeLab is not directed to children under the age of 13. We do not knowingly collect personal information from children. If we become aware that a child under 13 has provided us with personal data, we will take steps to delete it promptly.
             </p>
@@ -149,7 +159,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-xl font-semibold text-foreground">12. Changes to This Policy</h2>
             <p className="mt-3 leading-relaxed">
-              We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new policy on this page and updating the "Last updated" date. Continued use of the service after changes constitutes acceptance of the revised policy.
+              We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new policy on this page and updating the &quot;Last updated&quot; date. Continued use of the service after changes constitutes acceptance of the revised policy.
             </p>
           </section>
 
